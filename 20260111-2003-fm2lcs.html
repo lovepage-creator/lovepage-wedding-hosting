@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="th"><head><base href="https://lovepage-wedding.netlify.app/"><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>ถึงคนพิเศษ ❤️</title><link href="https://fonts.googleapis.com/css2?family=Itim&family=Mali:wght@400;700&display=swap" rel="stylesheet"> <style>
+  :root{
+    /* ทำให้เปลี่ยนสีจากฟอร์มได้ */
+    --bg:#D1FAFF;
+    --card:#ffffff; --ink:#2d2a32;
+    --rose:#FF5CBB; --rose-2:#FFD6E2;
+    --line:#f7cfe0; --ok:#1f9d63; --no:#c43b51;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  html,body{ overflow-x:hidden; }
+  body{
+    margin:0;
+    font-family:"Mali",system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .blobs{ position:fixed; inset:-10% -10% auto -10%; pointer-events:none; z-index:0; filter: blur(40px) }
+  .blobs span{ position:absolute; border-radius:50%; opacity:.55; mix-blend-mode:multiply }
+  .b1{ width:520px; height:520px; left:-6%; top:-6%; background:#ffe3ef; animation: drift1 18s ease-in-out infinite }
+  .b2{ width:440px; height:440px; right:-8%; top:10%; background:#ffd1e3; animation: drift2 22s ease-in-out infinite }
+  .b3{ width:500px; height:500px; left:20%; bottom:-18%; background:#ffeaf5; animation: drift3 26s ease-in-out infinite }
+  @keyframes drift1{ 0%{transform:translate(0,0)} 50%{transform:translate(6%,8%)} 100%{transform:translate(0,0)} }
+  @keyframes drift2{ 0%{transform:translate(0,0)} 50%{transform:translate(-5%,6%)} 100%{transform:translate(0,0)} }
+  @keyframes drift3{ 0%{transform:translate(0,0)} 50%{transform:translate(4%,-6%)} 100%{transform:translate(0,0)} }
+
+  .wrap{ width:min(760px,94vw); padding:24px; position:relative; z-index:1 }
+  .card{
+    background:linear-gradient(180deg,#fff,#fff9fc);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:28px clamp(18px,4vw,44px);
+    box-shadow:0 18px 60px rgba(255,109,154,.16);
+    backdrop-filter:saturate(1.1) blur(2px);
+  }
+  .center{text-align:center}
+  h1,h2{ font-family:"Itim","Mali",cursive; letter-spacing:.2px; margin:0 0 10px; color:rgba(255,77,126,.9); text-shadow:0 1px 0 #fff }
+  p{ margin:0 0 12px }
+
+  .btn{
+    appearance:none; border:0; cursor:pointer; user-select:none;
+    border-radius:999px; padding:12px 22px; font-weight:700; font-size:16px;
+    background:linear-gradient(180deg,var(--rose-2),var(--rose));
+    color:white; box-shadow:0 10px 26px rgba(255,77,126,.35);
+    transform:translateY(0); transition:transform .25s ease, box-shadow .25s ease;
+    position:relative; overflow:hidden;
+  }
+  .btn:hover{ transform:translateY(-1px); box-shadow:0 14px 32px rgba(255,77,126,.45) }
+  .btn:active{ transform:translateY(1px) }
+
+  .ripple{ position:absolute; border-radius:50%; transform:translate(-50%,-50%); pointer-events:none; background:rgba(255,255,255,.6); animation:rip .7s ease-out forwards }
+  @keyframes rip{ from{width:0;height:0;opacity:.7} to{width:360px;height:360px;opacity:0} }
+
+  .step{ display:none }
+  .step.show{ display:block; animation:fade .45s ease }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none} }
+
+  .type-soft{ font-size:clamp(15px,2.5vw,12px); line-height:1.8; white-space:pre-wrap; opacity:.98 }
+
+  .pop-zoom{ opacity:0; transform:scale(.8); animation:popInStrong .45s ease-out forwards, zoomPulseStrong 1.1s ease-in-out .45s 4 alternate }
+  @keyframes popInStrong{ from{opacity:0; transform:scale(.8)} to{opacity:1; transform:scale(1)} }
+  @keyframes zoomPulseStrong{ from{transform:scale(1)} to{transform:scale(1.16)} }
+
+  .envelope{
+    width:100%; max-width:560px; aspect-ratio:560 / 360; height:auto;
+    margin:18px auto 0; position:relative; perspective:1200px; max-height:72vh;
+  }
+  .env-body{
+    width:100%; height:100%; position:relative; border-radius:18px;
+    background:linear-gradient(180deg,#fff,#ffe9f1);
+    border:1px solid var(--line); overflow:hidden;
+    box-shadow:0 18px 40px rgba(255,77,126,.18);
+    transition:transform .4s ease;
+  }
+  .envelope:hover .env-body{ transform:translateY(-2px) }
+
+  .flap{
+    position:absolute; inset:0 0 auto 0; height:58%;
+    background:linear-gradient(180deg,#ffc6da,#ff9abb);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center; transform:rotateX(0deg);
+    transition:transform .9s cubic-bezier(.2,.75,.15,1);
+  }
+  .letter{
+    position:absolute;
+    inset:5% clamp(12px,3vw,18px) 16px clamp(12px,3vw,18px);
+    background:
+      linear-gradient(#fff,#fff) padding-box,
+      repeating-linear-gradient(transparent,transparent 28px,#ffe9f1 29px) border-box;
+    border-radius:14px; border:1px solid #f3d7e4;
+    padding:18px 16px 18px 18px; overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    box-shadow:inset 0 0 0 1px #ffe6ef;
+    transform:translateY(44px); opacity:0;
+    transition:all .6s ease .35s;
+  }
+  .envelope.open .flap{ transform:rotateX(160deg) }
+  .envelope.open .letter{ transform:none; opacity:1 }
+  .cover {
+    width: 50%;
+  }
+  canvas.fx{ position:fixed; inset:0; width:100vw; height:100vh; pointer-events:none; z-index:5 }
+
+  .snow { position:fixed; inset:0; pointer-events:none; z-index:10; }
+  .snowflake{
+    position:absolute; top:-10px; color:#fff; opacity:.9; font-size:1em;
+    animation: fall linear forwards;
+    text-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+  @keyframes fall{ to{ transform: translateY(100vh) } }
+
+  @media (max-width:480px){
+    body{ overflow:auto; }
+    .wrap{ width:100vw; padding:16px }
+    .card{ padding:18px clamp(12px,4vw,20px) }
+    .type-soft{ font-size:clamp(16px,4.2vw,20px); line-height:1.9 }
+    .envelope{ width:100%; max-width:none; aspect-ratio:3 / 2; max-height:78vh }
+    .letter{ inset:5% 10px 12px 10px }
+    .cover { width: 40%;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{ animation:none !important; transition:none !important }
+  }
+</style> <!-- ============ WATERMARK START (ลบทั้งบล็อกนี้เมื่อจ่ายเงิน) ============ -->
+<style>
+  /* ชั้นลายน้ำตัวอักษร */
+  #lovepage-watermark{
+    position: fixed; inset: 0; z-index: 99998; pointer-events: none;
+    background-repeat: repeat;
+    background-size: 320px 200px;    /* จะถูกปรับโดยสคริปต์ตาม TILE_W/H */
+    opacity: 1;
+    mix-blend-mode: multiply;        /* เอาออกได้ถ้าอยากสีตรง ๆ */
+    -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+  }
+  /* ชั้นเส้นกากบาท */
+  #lovepage-cross{
+    position: fixed; inset: 0; z-index: 99999; pointer-events: none;
+    opacity: 0.5;                    /* จะถูกปรับโดยสคริปต์ตาม CROSS_OPACITY */
+    -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+  }
+  @media print{
+    #lovepage-watermark{ opacity: 0.25; }
+    #lovepage-cross{ opacity: 0.35; }
+  }
+</style>
+<!-- ============ WATERMARK START (ลบทั้งบล็อกนี้เมื่อจ่ายเงิน) ============ --></head><body><!-- หิมะ --><div class="snow" id="snow" aria-hidden="true"></div><!-- เอฟเฟกต์หัวใจ --><canvas class="fx" id="fx"></canvas><!-- พื้นหลังนุ่ม --><div class="blobs" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div><!-- เนื้อหา --><main class="wrap"><!-- ขั้นเปิดอินโทร --><section id="step1" class="card step show center" aria-live="polite"><div id="line1" class="type-soft"></div><button id="toLetter" class="btn" style="display:none;margin-top:10px">คือ….</button></section><!-- ขั้นจดหมาย --><section id="step2" class="card step center" aria-live="polite"><h2 style="margin-bottom:6px">ลองเปิดอ่านดูนะ</h2><div class="envelope" id="envelope" role="button" tabindex="0" aria-expanded="false" aria-controls="letterText"><div class="env-body"><div class="flap"></div><div class="letter" id="letterText"><!-- รูปตัวเลือก --><img class="cover" src="templates/mes.png" alt=""><div id="confession" class="type-soft" aria-live="polite"></div></div></div></div></section></main> <script>
+  // ---------- คอนเทนต์จากโทเคน (แทนค่าจาก Editor)
+    // ---------- คอนเทนต์จากโทเคน (แทนค่าจาก Editor)
+  const RAW_INTRO       = `เรามีเรื่องอยากบอกเธอ... ❤️`;
+  const RAW_CONFESSION  = `ตัวอย่างข้อความ แก้ไขข้อความที่อยากบอกตรงนี้`;
+
+  // ---------- Normalizer: แปลง <br>, </br>, <br/> และ CRLF → \n + decode entity
+// 🔧 แทนที่ normalizeMultiline() เดิมด้วยอันนี้
+function normalizeMultiline(raw){
+  if (typeof raw !== 'string') raw = String(raw ?? '');
+
+  // 1) decode entity (&lt;br&gt; → <br>, &amp; → & ฯลฯ)
+  const ta = document.createElement('textarea');
+  ta.innerHTML = raw;
+  let s = ta.value;
+
+  // 2) แปลง <br> ทุกสายพันธุ์ → \n  (รองรับ attribute/ช่องว่าง/ตัวใหญ่)
+  //    เช่น <br>, <br/>, </br>, <br data-mce-bogus="1">
+  s = s.replace(/<\s*\/?\s*br\b[^>]*>/gi, '\n');
+
+  // 3) บางระบบยัด \n มาเป็นตัวอักษรจริง ๆ (backslash-n) → แปลงด้วย
+  s = s.replace(/\\n/g, '\n');
+
+  // 4) editor หลายตัวใช้ <p> หรือ <div> คั่นบรรทัด → เปลี่ยนเป็น \n
+  s = s
+    .replace(/<\/\s*(p|div|li|h[1-6])\s*>/gi, '\n')
+    .replace(/<\s*(p|div|li|h[1-6])\b[^>]*>/gi, '');
+
+  // 5) ตัด CRLF/CR ให้เหลือ LF เดียว
+  s = s.replace(/\r\n?/g, '\n');
+
+  // 6) เก็บเฉพาะตัวอักษร (กันแท็กอื่น ๆ โผล่) — ถ้าต้องการเก็บ <b> <i> ไว้ ให้คอมเมนต์บรรทัดนี้
+  s = s.replace(/<[^>]+>/g, '');
+
+  // 7) เคลียร์ช่องว่างก่อนขึ้นบรรทัดใหม่
+  s = s.replace(/[ \t]+\n/g, '\n');
+
+  // 8) trim ปลายหัวท้ายแบบสุภาพ
+  return s.trim();
+}
+
+  const INTRO_TEXT      = normalizeMultiline(RAW_INTRO);
+  const CONFESSION_TEXT = normalizeMultiline(RAW_CONFESSION);
+
+  // ---------- Helpers
+  const sleep = (ms)=> new Promise(r=>setTimeout(r, ms));
+  const ease  = (ms,f=1)=> new Promise(r=>setTimeout(r, ms*f));
+
+  // ใช้ grapheme-safe iteration กันอิโมจิ/วรรณยุกต์แตก
+  function splitGraphemes(text) {
+    if (Intl && Intl.Segmenter) {
+      const seg = new Intl.Segmenter('th', { granularity: 'grapheme' });
+      return Array.from(seg.segment(text), s => s.segment);
+    }
+    // fallback: อย่างน้อย Array.from ก็รักษา surrogate pair ของอิโมจิ
+    return Array.from(text);
+  }
+
+  async function typeSoft(el, text, speed=70){
+    el.textContent = '';
+    const glyphs = splitGraphemes(text);
+    const punct = new Set([',','、',';','…','!','?','—','-','–','ฯ','。','?','!']);
+
+    for (let i = 0; i < glyphs.length; i++){
+      const ch = glyphs[i];
+      el.textContent += ch;
+
+      if (ch === ' ')            { await sleep(speed*0.25); }
+      else if (ch === '\n')      { await sleep(speed*3); }
+      else if (punct.has(ch))    { await sleep(speed*1.4); }
+      else                       { await sleep(speed); }
+
+      const p = el.parentElement;
+      p.scrollTo({ top: p.scrollHeight, behavior: 'smooth' });
+    }
+  }
+  
+  function showStep(n){
+    document.querySelectorAll('.step').forEach(s=>s.classList.remove('show'));
+    document.getElementById('step'+n).classList.add('show');
+  }
+  function addRipple(e){
+    const btn=e.currentTarget, r=document.createElement('span'); r.className='ripple';
+    const rect=btn.getBoundingClientRect(); r.style.left=(e.clientX-rect.left)+'px'; r.style.top=(e.clientY-rect.top)+'px';
+    btn.appendChild(r); setTimeout(()=>r.remove(),700);
+  }
+
+  // ---------- Init
+  async function init(){
+    const line1 = document.getElementById('line1');
+    const toLetter = document.getElementById('toLetter');
+    await typeSoft(line1, INTRO_TEXT || 'เรามีเรื่องอยากบอกเธอ... ❤️', 80);
+    await ease(700);
+    toLetter.style.display='inline-block';
+    toLetter.classList.add('pop-zoom');
+    toLetter.addEventListener('click', addRipple);
+    toLetter.addEventListener('click', ()=> showStep(2));
+
+    const envelope = document.getElementById('envelope');
+    const confessionEl = document.getElementById('confession');
+    let opened=false;
+
+    envelope.addEventListener('click', ()=> openLetter());
+    envelope.addEventListener('keydown', (e)=>{ if(e.key==='Enter'||e.key===' ') openLetter(); });
+
+    async function openLetter(speed=55){
+      if(opened) return; opened=true;
+      envelope.classList.add('open'); envelope.setAttribute('aria-expanded','true');
+      await ease(1000);
+      await typeSoft(confessionEl, CONFESSION_TEXT || '', speed);
+    }
+    window._openLetter = (spd)=> openLetter(spd);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', init, {once:true});
+  } else {
+    init();
+  }
+
+  // ---------- Hearts FX (เหมือนเดิม)
+  const cvs=document.getElementById('fx'), ctx=cvs.getContext('2d');
+  let W,H; function resize(){ W=cvs.width=innerWidth; H=cvs.height=innerHeight } resize(); addEventListener('resize',resize);
+  const hearts=[];
+  function heartPath(ctx,s=10){ ctx.moveTo(0,-s*0.3); ctx.bezierCurveTo(-s,-s,-s*1.8,s*0.3,0,s); ctx.bezierCurveTo(s*1.8,s*0.3,s,-s,0,-s*0.3); }
+  function spawnHearts(n=60){ for(let i=0;i<n;i++){ hearts.push({ x:W/2+(Math.random()*220-110), y:H/2+(Math.random()*90-45), s:8+Math.random()*16, a:1, vx:(Math.random()*2-1)*1.1, vy:-(1.6+Math.random()*2.4), vr:(Math.random()*2-1)*0.05, r:Math.random()*Math.PI }); } }
+  function loop(){ ctx.clearRect(0,0,W,H); for(const h of hearts){ h.x+=h.vx; h.y+=h.vy; h.r+=h.vr; h.vy+=0.03; h.a-=0.012; } for(let i=hearts.length-1;i>=0;i--) if(hearts[i].a<=0) hearts.splice(i,1); for(const h of hearts){ ctx.save(); ctx.translate(h.x,h.y); ctx.rotate(h.r); ctx.globalAlpha=Math.max(0,h.a); ctx.beginPath(); heartPath(ctx,h.s); ctx.fillStyle='#ff6d9a'; ctx.fill(); ctx.restore(); } requestAnimationFrame(loop); }
+  loop();
+  function celebrate(){ spawnHearts(80); const t=setInterval(()=>spawnHearts(42),200); setTimeout(()=>clearInterval(t),1200); }
+
+  // ---------- หิมะตก
+  function createSnow(){
+    const snow = document.getElementById('snow');
+    const FLAKES = 50;
+    for(let i=0;i<FLAKES;i++) spawnOne();
+    function spawnOne(){
+      const f = document.createElement('div');
+      f.className = 'snowflake';
+      f.textContent = '❄';
+      const size = Math.random()*12 + 10;
+      const left = Math.random()*100;
+      const dur  = Math.random()*4 + 6;
+      const delay= Math.random()*4;
+      const drift = (Math.random()*40 - 20);
+
+      f.style.left = left + 'vw';
+      f.style.fontSize = size + 'px';
+      f.style.animationDuration = dur + 's';
+      f.style.animationDelay = delay + 's';
+      f.style.transform = `translateX(${drift}px)`;
+
+      f.animate(
+        [{transform:`translate(${drift}px,0)`},{transform:`translate(${drift*1.5}px,100vh)`}],
+        {duration: dur*1000, delay: delay*1000, easing:'linear'}
+      );
+
+      f.addEventListener('animationend', ()=>{ f.remove(); spawnOne(); });
+      snow.appendChild(f);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', createSnow, { once:true });
+</script> </body></html>
