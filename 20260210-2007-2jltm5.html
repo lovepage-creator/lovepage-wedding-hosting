@@ -1,0 +1,337 @@
+<!DOCTYPE html><html lang="th"><head><base href="https://lovepage-premium-card.netlify.app/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ถึงคุณชญาน์นันท์💗</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet"> <style>
+        /* --- CORE STYLES --- */
+        :root {
+            --primary-color: #f98aff; /* สีแดงตุ่น */
+            --bg-color: #fae8ff;      /* สีพื้นหลังชมพูจาง */
+            --text-color: #4a4a4a;    /* สีตัวหนังสือ */
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh; width: 100vw;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-style: italic;
+        }
+
+        /* --- STAGE SYSTEM --- */
+        .stage {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 1.5s ease-in-out;
+            /* background: var(--bg-color);  <-- เอาออกเพื่อให้เห็นหัวใจลอย */
+            padding: 20px; box-sizing: border-box;
+            z-index: 10; /* อยู่เหนือหัวใจ */
+        }
+
+        /* เพิ่มพื้นหลังแยกเพื่อให้ Stage 1 บังหัวใจไว้ก่อน */
+        #stage-1 {
+            background: var(--bg-color);
+            z-index: 20;
+        }
+
+        .stage.active { opacity: 1; pointer-events: all; }
+
+        /* --- BACKGROUND HEARTS (NEW) --- */
+        .heart-bg-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none;
+            z-index: 1; /* อยู่หลังเนื้อหา */
+            opacity: 0; transition: opacity 2s;
+        }
+        .float-heart {
+            position: absolute; bottom: -100px;
+            color: var(--primary-color);
+            opacity: 0.5;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- STAGE 1: INTRO --- */
+        .heart-btn {
+            background: var(--primary-color);
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(214, 90, 90, 0.4);
+            animation: heartbeat 1.5s infinite;
+            border: none; color: white; font-size: 24px;
+            margin-top: 20px; transition: transform 0.2s;
+        }
+        .heart-btn:active { transform: scale(0.9); }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- STAGE 2: TIMELINE --- */
+        .timeline-container {
+            width: 100%; max-width: 400px; height: 60vh;
+            overflow-y: auto; position: relative;
+            padding-left: 20px; padding-right: 10px;
+            text-align: left; scroll-behavior: smooth;
+            /* เพิ่มพื้นหลังโปร่งแสงให้อ่านง่ายขึ้นทับหัวใจ */
+            background: rgba(255, 249, 249, 0.85); 
+            border-radius: 15px; padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .timeline-container::-webkit-scrollbar { width: 5px; }
+        .timeline-container::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+
+        .timeline-item {
+            position: relative; padding-left: 30px;
+            margin-bottom: 40px; border-left: 2px solid #ddd;
+        }
+        .timeline-item::before {
+            content: '♥'; position: absolute; left: -11px; top: 0;
+            background: var(--bg-color); color: var(--primary-color); font-size: 20px;
+        }
+        .date-label { font-size: 0.9em; color: #888; font-weight: 600; }
+        .timeline-img {
+            width: 100%; border-radius: 10px; margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- STAGE 3: REAL-TIME CLOCK --- */
+        .beating-heart-icon {
+            font-size: 40px; color: var(--primary-color);
+            margin-bottom: 10px; animation: heartbeat 1.2s infinite;
+        }
+        .timer-container {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 15px; margin-top: 20px; width: 100%; max-width: 320px;
+        }
+        .time-box {
+            background: rgba(255, 255, 255, 0.9); /* พื้นหลังโปร่งแสงนิดๆ */
+            padding: 15px; border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(214, 90, 90, 0.1);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0; transform: scale(0.8);
+        }
+        .time-value {
+            font-size: 2rem; font-weight: bold;
+            color: var(--primary-color); font-family: 'Playfair Display', serif;
+            font-variant-numeric: tabular-nums;
+        }
+        .time-label { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        
+        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+
+        /* --- STAGE 4: MESSAGE & TYPEWRITER --- */
+        .final-msg {
+            background: rgba(255, 255, 255, 0.95); /* พื้นหลังโปร่งแสง */
+            padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 85%; max-width: 400px;
+            position: relative; overflow: visible;
+            min-height: 300px; display: flex; flex-direction: column;
+        }
+        .typewriter-text {
+            font-family: 'Mali', 'Sarabun', 'Noto Sans Thai', sans-serif;  line-height: 1.8;
+            text-align: left; font-size: 1rem; color: #555;
+            padding-top: 10px;
+            flex-grow: 1;
+        }
+        .cursor {
+            display: inline-block; width: 2px; height: 1.2em;
+            background-color: var(--primary-color);
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- UTILS --- */
+        .next-btn {
+            background: rgba(255, 255, 255, 0.8); border: 1px solid var(--primary-color);
+            color: var(--primary-color); padding: 10px 30px;
+            border-radius: 30px; margin-top: 25px; cursor: pointer;
+            transition: all 0.3s; font-family: 'Sarabun', sans-serif;
+            font-weight: bold;
+        }
+        .next-btn:hover { background: var(--primary-color); color: white; }
+        #player { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    </style>
+</head><body><div id="heart-bg" class="heart-bg-container"></div><div id="stage-1" class="stage active"><h3>Valentine's Day & My daring day</h3><h1 style="font-size: 2.5rem; line-height: 1.2;">ZEN R WAN 💗<br>The Story in my life🌸</h1><p style="color:#888;">I met you last year and I have you to this day.</p><button class="heart-btn" onclick="startExperience()"><i style="font-style: normal;">♥</i></button><p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.6;">Tap heart to start</p></div><div id="stage-2" class="stage"><h2 style="margin-bottom: 20px;">Our Journey🫂💕</h2><div class="timeline-container"><div class="timeline-item"><div class="date-label">23 April 2020</div><div>วันแรกกเรารักเธอยังไงทุกวันนี้เรารักเธอขึ้นมากกว่านั้นนะ</div><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770728418268_17z21ej.jpg?alt=media&token=f6f500a2-9391-4475-9602-090651ac55e3" class="timeline-img"></div><div class="timeline-item"><div class="date-label">23 August 68</div><div>และะเราก็ได้เจอทุกวันและได้อยู่เที่ยวกับเธอ</div><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770728508595_rdt2olr.jpg?alt=media&token=bac51f79-d8d5-4db3-bef6-155353d2f61a" class="timeline-img"></div><div class="timeline-item"><div class="date-label">31 December 2025 & 01 Jan 2026🫶🏻</div><div>ปีใหม่... เราอยู่ด้วยกันที่ทะเลดูจากรูปก็รู้ว่าเธอเด่นในสายตาเรามาก</div><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770728552905_hg79lpv.jpg?alt=media&token=f6749d1e-6294-4ad2-9c4f-0db1af171ff9" class="timeline-img"></div><div class="timeline-item"><div class="date-label">Today</div><div>จนถึงวันนี้... รักเหมือนเดิมนะรักขึ้นทุกวันด้วย</div><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770728597840_t2iob82.jpg?alt=media&token=55a71856-c454-40c7-8205-8171d2fc1f4e" class="timeline-img"></div></div><button class="next-btn" onclick="goToStage(3)">See Time Moving</button></div><div id="stage-3" class="stage"><div class="beating-heart-icon">♥</div><h2 style="margin-top:0;">You gifted your heart for me💗</h2><p style="color:#999; margin-bottom:20px; font-size: 0.9rem;">ทุกวินาทีที่มีเธอ คือของขวัญที่ดีที่สุด</p><div class="timer-container"><div class="time-box" style="animation-delay: 0.1s;"><div class="time-value" id="days">0</div><div class="time-label">Days</div></div><div class="time-box" style="animation-delay: 0.2s;"><div class="time-value" id="hours">0</div><div class="time-label">Hours</div></div><div class="time-box" style="animation-delay: 0.3s;"><div class="time-value" id="minutes">0</div><div class="time-label">Minutes</div></div><div class="time-box" style="animation-delay: 0.4s;"><div class="time-value" id="seconds">0</div><div class="time-label">Seconds</div></div></div><button class="next-btn" onclick="goToStage(4)" style="margin-top: 40px;">Read Message</button></div><div id="stage-4" class="stage"><div class="final-msg"><h2>To My Love</h2><div id="typewriter-area" class="typewriter-text"></div><div style="text-align: right; margin-top: auto; font-weight: bold; color: var(--primary-color);">- ZEN💗 OR I GHEA of you🌸 -</div></div><button class="next-btn" style="margin-top:20px;" onclick="location.reload()">Replay</button></div><div id="player"></div> <script>
+        // ================= CONFIGURATION =================            
+        // ตัวอย่าง: วันที่ 1 มกราคม 2024 เวลา 09:09:00
+        const START_DATE = new Date("2025-10-01T15.50:00"); 
+        const FINAL_MESSAGE = `ถึง WAN💗<br><br>ขอบคุณที่อยู่ข้างกันมาตลอดนะ ไม่ว่าจะสุขหรือทุกข์ เธอก็ยังจับมือเค้าไว้เสมอ เค้าสัญญาว่าจะดูแลเธอให้ดีที่สุด จะเป็นคนที่ดีขึ้นในทุกๆ วัน`;
+        const CUSTOM_YOUTUBE_URL = "https://youtu.be/dCEvQ69aGYs?si=emKjHVH1OC_MmrtL";
+
+        // ================= SYSTEM LOGIC =================
+        
+        function extractVideoID(url) {
+            var match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/);
+            return (match && match[7].length == 11) ? match[7] : false;
+        }
+
+        var player;
+        const VIDEO_ID = extractVideoID(CUSTOM_YOUTUBE_URL);
+
+        function onYouTubeIframeAPIReady() {
+            if(VIDEO_ID) {
+                player = new YT.Player('player', {
+                    height: '0', width: '0', videoId: VIDEO_ID,
+                    playerVars: { 'playsinline': 1, 'controls': 0, 'loop': 1, 'playlist': VIDEO_ID }
+                });
+            }
+        }
+        
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function startExperience() {
+            if(player && player.playVideo) {
+                player.playVideo();
+                player.setVolume(60);
+            }
+            initFloatingHearts(); // เริ่มปล่อยหัวใจลอย
+            goToStage(2);
+        }
+
+        function goToStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById(`stage-${stageNum}`).classList.add('active');
+
+            if (stageNum === 3) startTimer();
+            if (stageNum === 4) startTypewriter();
+        }
+
+        // --- NEW: Floating Hearts Logic ---
+        function initFloatingHearts() {
+            const container = document.getElementById('heart-bg');
+            container.style.opacity = '1'; // ค่อยๆ เฟดเข้ามา
+            
+            const heartCount = 20; // จำนวนหัวใจที่ลอยพร้อมกัน
+            
+            for (let i = 0; i < heartCount; i++) {
+                createHeart(container);
+            }
+        }
+
+        function createHeart(container) {
+            const heart = document.createElement('div');
+            heart.classList.add('float-heart');
+            heart.innerText = '♥';
+            
+            // สุ่มตำแหน่งและขนาด
+            const size = Math.random() * 20 + 10; // 10px ถึง 30px
+            const left = Math.random() * 100;
+            const duration = Math.random() * 5 + 5; // 5 ถึง 10 วินาที
+            const delay = Math.random() * 5;
+
+            heart.style.left = left + 'vw';
+            heart.style.fontSize = size + 'px';
+            heart.style.animationDuration = duration + 's';
+            heart.style.animationDelay = '-' + delay + 's'; // ให้เริ่มอนิเมชั่นแบบสุ่มเลย ไม่ต้องรอ
+            
+            // สุ่มสีโทนชมพู/แดง
+            const colors = ['#d65a5a', '#ff9a9e', '#fad0c4', '#ffecd2'];
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+            container.appendChild(heart);
+        }
+
+        // --- Logic Stage 3: Timer ---
+        let timerInterval;
+        function startTimer() {
+            if(timerInterval) clearInterval(timerInterval);
+            
+            function update() {
+                const now = new Date();
+                const diff = now - START_DATE;
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            }
+            timerInterval = setInterval(update, 1000);
+            update(); 
+        }
+
+        // --- Logic Stage 4: Typewriter ---
+let isTyping = false;
+
+function startTypewriter() {
+    if (isTyping) return;
+    isTyping = true;
+
+    const target = document.getElementById('typewriter-area');
+    target.innerHTML = '<span class="cursor"></span>';
+
+    const speed = 60;
+
+    // แยก HTML tag ออกจาก text
+    const parts = FINAL_MESSAGE.match(/(<[^>]+>|[^<]+)/g) || [];
+
+    const segmenter = new Intl.Segmenter('th', { granularity: 'grapheme' });
+
+    let partIndex = 0;
+    let charIndex = 0;
+    let currentSegments = [];
+
+    function type() {
+        if (partIndex >= parts.length) return;
+
+        const cursor = target.querySelector('.cursor');
+        const part = parts[partIndex];
+
+        // --- ถ้าเป็น HTML tag (<br>, <b> ฯลฯ) ---
+        if (part.startsWith('<')) {
+            cursor.insertAdjacentHTML('beforebegin', part);
+            partIndex++;
+            charIndex = 0;
+            setTimeout(type, speed);
+            return;
+        }
+
+        // --- ถ้าเป็น text ปกติ ---
+        if (charIndex === 0) {
+            currentSegments = [...segmenter.segment(part)];
+        }
+
+        if (charIndex < currentSegments.length) {
+            cursor.insertAdjacentText(
+                'beforebegin',
+                currentSegments[charIndex].segment
+            );
+            charIndex++;
+            setTimeout(type, speed);
+        } else {
+            partIndex++;
+            charIndex = 0;
+            setTimeout(type, speed);
+        }
+    }
+
+    setTimeout(type, 500);
+}
+
+</script> </body></html>
