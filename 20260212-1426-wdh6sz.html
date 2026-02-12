@@ -1,0 +1,609 @@
+<!DOCTYPE html><html lang="th"><head><base href="https://lovepage-premium-card.netlify.app/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><title>ถึงเมียตู่ ❤️</title><link href="https://fonts.googleapis.com/css2?family=Mali:ital,wght@0,400;0,600;1,400&family=Fredoka:wght@400;600&display=swap" rel="stylesheet"><link rel="preload" as="image" href="/img/photo2.png"> <style>
+        /* --- THEME SETTINGS --- */
+        :root {
+            --bg-gradient: linear-gradient(180deg, #ffdde1 0%, #ff5c77 100%);
+            --night-gradient: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            --primary: #ff6879;
+            --bookcolor: #ff6b6b;
+            --text-color: #574b90;
+        }
+
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            height: 100dvh; 
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Mali', cursive;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            display: flex; justify-content: center; align-items: center;
+            touch-action: none;
+            perspective: 1500px;
+            transition: background 1.5s ease;
+        }
+
+        body.night-mode { background: var(--bg-gradient); }
+
+        /* --- GLOBAL EFFECTS --- */
+        .snow-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 50; overflow: hidden;
+        }
+        .snowflake {
+            position: absolute; top: -10px; background: white;
+            border-radius: 50%; opacity: 0.8; filter: blur(0.5px);
+            animation-name: fall; animation-timing-function: linear; animation-iteration-count: infinite;
+        }
+        @keyframes fall { to { transform: translateY(110vh); } }
+
+        .shutter-flash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; opacity: 0; pointer-events: none; z-index: 100;
+        }
+        .shutter-flash.flash { animation: flashAnim 1.2s ease-in-out; }
+        @keyframes flashAnim { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* --- CONTAINER --- */
+        .stage-container {
+            position: relative;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .stage {
+            position: absolute; 
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.6s ease;
+            visibility: hidden; 
+        }
+        .stage.active { 
+            opacity: 1; pointer-events: all; z-index: 10; visibility: visible; 
+        }
+
+        /* BUTTON STYLE */
+        .btn-nav {
+            background: white; border: none; color: var(--primary);
+            padding: 12px 30px; border-radius: 50px; margin-top: 30px; cursor: pointer;
+            font-family: 'Fredoka', sans-serif; font-size: 1.1rem; font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 107, 129, 0.4);
+            transition: transform 0.2s; z-index: 20;
+            white-space: nowrap;
+        }
+        .btn-nav:active { transform: scale(0.95); }
+
+        /* ================= STAGE 1: VINYL ================= */
+        .vinyl {
+            width: 250px; height: 250px; background: #333; border-radius: 50%;
+            position: relative; margin: 0 auto 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            background-image: repeating-radial-gradient(#333 0, #333 2px, #222 3px, #222 4px);
+            border: 6px solid white; cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (max-width: 380px) { .vinyl { width: 200px; height: 200px; } }
+        
+        .vinyl:active { transform: scale(0.95); }
+        .vinyl.spinning { animation: spin 4s linear infinite; }
+        .vinyl-label {
+            position: relative; 
+            /* คงค่าเดิมไว้ */
+            width: 90px; height: 90px; 
+            background: var(--primary); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; color: white;
+            text-align: center; border: 4px solid white;           
+            /* ป้องกัน User กดเลือกข้อความตอนแผ่นหมุน */
+            user-select: none; 
+            -webkit-user-select: none;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ================= STAGE 2: POLAROIDS ================= */
+        .polaroid-stack { 
+            position: relative; width: 280px; height: 400px; 
+            margin-top: -20px; 
+        }
+        .polaroid {
+            position: absolute; top: 0; left: 0; width: 100%;
+            background: white; padding: 12px 12px 50px 12px;
+            box-sizing: border-box; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column; transform-origin: center bottom;
+            cursor: grab; user-select: none; transition: transform 0.3s ease; border-radius: 12px;
+        }
+        .polaroid img {
+            width: 100%; height: 260px; object-fit: cover;
+            background: #f0f0f0; border-radius: 8px; pointer-events: none;
+        }
+        .polaroid-caption {
+            font-family: 'Mali', cursive; font-size: 1rem; color: #292929;
+            text-align: center; margin-top: 15px; pointer-events: none;
+        }
+        .polaroid.moving { transition: none !important; cursor: grabbing; z-index: 100; }
+        .polaroid.fly-right { transform: translate(150%, 50px) rotate(45deg) !important; opacity: 0; transition: 0.6s; }
+        .polaroid.fly-left { transform: translate(-150%, 50px) rotate(-45deg) !important; opacity: 0; transition: 0.6s; }
+
+        /* ================= STAGE 3: WINGED ENVELOPE ================= */
+        .winged-wrapper { 
+            position: relative; width: 320px; height: 220px; 
+            display: flex; justify-content: center; 
+            transform: scale(0.9); 
+        }
+        @media (max-width: 480px) { .winged-wrapper { transform: scale(0.6); } }
+        
+        .wing { background:#fff; border-radius:12px 20px 60px 20px; width:120px; height:50px; margin-top:80px; position:absolute; }
+        .wing.right { margin-left:-60px; left:50%; animation:flap1 1s infinite; border-bottom:3px solid rgba(0,0,0,.08); border-radius:12px 20px 60px 20px; transform:rotate(-10deg) translate(250px,0); }
+        .wing.left { border-radius:12px 20px 20px 60px; margin-left:-60px; left:50%; animation:flap2 1s infinite; border-bottom:3px solid rgba(0,0,0,.08); transform:rotate(10deg) translate(-248px,0); }
+        .wing.right:before { position:absolute; content:''; background:#fff; width:70%; height:70%; border-bottom:3px solid rgba(0,0,0,.08); border-radius:20px 20px 60px 20px; transform:rotate(20deg) translate(-1px,0); margin-top:38px; }
+        .wing.right:after { position:absolute; content:''; background:#fff; width:40%; height:30%; border-bottom:3px solid rgba(0,0,0,.08); border-radius:0 0 60px 70px; transform:rotate(29deg) translate(-8px,0); margin-top:66px; }
+        .wing.left:before { position:absolute; content:''; background:#fff; width:70%; height:60%; border-bottom:3px solid rgba(0,0,0,.08); transform:translate(46%,0) rotate(-20deg); border-radius:12px 20px 70px 70px; margin-top:40px; }
+        .wing.left:after { position:absolute; content:''; background:#fff; width:40%; height:30%; border-bottom:3px solid rgba(0,0,0,.08); transform:translate(164%,0) rotate(-34deg); border-radius:0 0 70px 60px; margin-top:58px; }
+        @keyframes flap1{ 0%{transform:rotate(-10deg) translate(250px,0)} 50%{transform:rotate(-5deg) translate(250px,0)} }
+        @keyframes flap2{ 0%{transform:rotate(10deg) translate(-248px,0)} 50%{transform:rotate(5deg) translate(-248px,0)} }
+        .heart-trigger { position:absolute; width:120px; height:100px; margin-left:-50px; left:50%; animation:heart1 1s infinite; transform:scale(.8); transition:.2s; margin-top:60px; z-index:3; cursor:pointer; }
+        .heart-trigger:before,.heart-trigger:after { content:""; width:50px; height:80px; position:absolute; left:50px; top:0; border-radius:50px 50px 6px 6px; background:crimson; transform:rotate(-45deg); transform-origin:0 100% }
+        .heart-trigger:after { left:0; transform:rotate(45deg); transform-origin:100% 100% }
+        @keyframes heart1{ 0%{transform:scale(.8) translateY(0)} 50%{transform:scale(.92) translateY(12px)} 100%{transform:scale(.8)} }
+        #flying-envelope { background:#fff; margin:0px auto; height:200px; position:relative; width:320px; border-radius:8px; overflow:hidden; animation:floaty 1s infinite; }
+        @keyframes floaty{ 0%{transform:translateY(0)} 50%{transform:translateY(12px)} }
+        .sides { border-color:transparent #fbfbfb #f7f7f7 #fcfcfc; border-style:solid; border-width:90px 170px; bottom:0; height:0; left:0; position:absolute; width:0; }
+        .top { border-color:#fff transparent transparent; border-style:solid; border-width:108px 140px 90px 140px; height:0; left:0; position:absolute; top:0; transform-origin:50% 0; width:0; }
+
+        /* ================= STAGE 4: BOOK ================= */
+        .book-wrapper {
+            position: relative; width: 280px; height: 380px; cursor: pointer; perspective: 2000px;
+        }
+        .book-cover {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transform-origin: left; transform-style: preserve-3d;
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 2;
+        }
+        .book-wrapper.open .book-cover { transform: rotateY(-180deg); }
+        .front-side {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bookcolor); color: white;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Fredoka', sans-serif; font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            border-radius: 5px 15px 15px 5px; backface-visibility: hidden; z-index: 2;
+        }
+        .back-side {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fff0f0; border-radius: 5px 15px 15px 5px;
+            transform: rotateY(180deg); backface-visibility: hidden;
+            z-index: 1; box-shadow: inset -5px 0 10px rgba(0,0,0,0.05);
+        }
+        .inside-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fff0f0; border-radius: 5px 15px 15px 5px;
+            z-index: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box; text-align: center;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        }
+        .book-msg { font-size: 1rem; color: #574b90; line-height: 1.6; margin-bottom: 20px; }
+        .book-signature { font-family: 'Caveat', cursive; font-size: 1.4rem; color: #ff6b81; align-self: flex-end; margin-right: 10px; }
+        .hint-text { color: white; margin-top: 15px; font-size: 0.9rem; animation: pulse 2s infinite; }
+        #btn-stage5 { opacity: 0; pointer-events: none; transition: opacity 1s; }
+
+        /* ================= STAGE 5: GAME & FINALE ================= */
+        /* Puzzle Styles */
+        .puzzle-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 20;
+        }
+        .preview-box {
+            width: 100px; height: 100px;
+            background-size: cover; background-position: center;
+            border: 3px solid white; border-radius: 8px;
+            margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3x3 Grid */
+            grid-template-rows: repeat(3, 1fr);
+            width: 300px; height: 300px;
+            gap: 2px;
+            background: rgba(255,255,255,0.1);
+            padding: 2px; border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        @media (max-width: 340px) {
+            .game-board { width: 270px; height: 270px; }
+        }
+
+        .puzzle-piece {
+            background-size: 300px 300px; /* Full image size for 3x3 (100px chunks) */
+            cursor: grab;
+            border-radius: 2px;
+            touch-action: none; /* Important for drag on mobile */
+            position: relative;
+        }
+        @media (max-width: 340px) { .puzzle-piece { background-size: 270px 270px; } }
+
+        .puzzle-piece.correct {
+            filter: brightness(1.1);
+            z-index: 1;
+        }
+        /* Style for the Ghost/Clone during drag */
+        .drag-ghost {
+            position: fixed; pointer-events: none; z-index: 1000;
+            width: 100px; height: 100px; /* Match piece size */
+            background-size: 300px 300px;
+            border-radius: 4px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            opacity: 0.9;
+            transform: scale(1.1);
+            border: 2px solid #fff;
+        }
+        @media (max-width: 340px) { 
+            .drag-ghost { width: 90px; height: 90px; background-size: 270px 270px; } 
+        }
+
+        .puzzle-piece.dragging-source {
+            opacity: 0.3;
+        }
+
+        /* Success & Finale Styles */
+        .finale-content {
+            display: none; /* Hidden by default */
+            flex-direction: column; align-items: center;
+            text-align: center; color: white; z-index: 30;
+            width: 90%;
+            animation: fadeIn 1s ease;
+        }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+
+        .neon-text {
+            font-size: 2.5rem; font-family: 'Fredoka', sans-serif;
+            text-shadow: 0 0 10px #ff00de, 0 0 20px #ff00de;
+            margin-bottom: 20px;
+        }
+
+        /* Glitter/Confetti */
+        .confetti {
+            position: absolute; width: 10px; height: 10px; background-color: #f00;
+            animation: confetti-fall linear forwards;
+            top: -10px; z-index: 50;
+        }
+        @keyframes confetti-fall {
+            to { transform: translateY(110vh) rotate(720deg); }
+        }
+
+        .firework {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 10px; height: 10px; border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            animation: fireworkAnim 2.5s infinite;
+        }
+        .firework:nth-child(2) { animation-delay: 1.2s; top: 30%; left: 20%; }
+        .firework:nth-child(3) { animation-delay: 0.6s; top: 40%; left: 80%; }
+        @keyframes fireworkAnim {
+            0% { width: 10px; opacity: 1; box-shadow: 0 0 0 0 #fff; }
+            100% { width: 10px; opacity: 0; box-shadow: -100px -100px 0px #ff0040, 100px -100px 0px #ffff00, -100px 100px 0px #00ff80, 100px 100px 0px #00ffff; }
+        }
+
+        #player-container { display: none; }
+    </style>
+</head><body><div id="snow-container" class="snow-container"></div><div id="shutter" class="shutter-flash"></div><div id="confetti-container" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;"></div><div class="stage-container"><div id="stage-1" class="stage active"><div class="vinyl" id="vinyl-disc" onclick="playMusicOnly()"><div class="vinyl-label"><div style="line-height:1.2; font-size:0.8rem;"><span style="font-size:1.8rem;">♥</span><br>เปิด<br>เพลง </div></div></div><h2 style="color:white; text-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top:20px;">Happy Valentine's Day</h2><button class="btn-nav" onclick="goToStage(2)">Special Day 💖</button></div><div id="stage-2" class="stage"><div class="polaroid-stack" id="polaroid-container"><div class="polaroid" style="transform: rotate(-3deg); z-index:1;"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770880673063_f9bo4x6.jpg?alt=media&token=4b4a79a5-8b38-4c58-ad7c-a807d65c5315"><div class="polaroid-caption">รักกันไปจนนิรันดร์ เลยนะครับเมียตู่</div></div><div class="polaroid" style="transform: rotate(2deg); z-index:2;"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770880850079_qghgvc6.jpg?alt=media&token=0ef49122-7732-423e-a59a-a54d872e6144"><div class="polaroid-caption">บรรยากาศดีสุดๆ</div></div><div class="polaroid" style="transform: rotate(-2deg); z-index:3;"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770880573139_xd74jw2.jpg?alt=media&token=8cc2bb49-3264-42b6-b65d-4d061763924f"><div class="polaroid-caption">ชอบเวลาที่อยู่กับเมียนะ</div></div><div class="polaroid" style="transform: rotate(3deg); z-index:4;"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770880543386_eru0ob0.jpg?alt=media&token=8c0a64aa-b97a-4378-a62a-5767935e05da"><div class="polaroid-caption">ไปหลาย ๆ ที่ด้วยกันเลยนะ</div></div></div><p style="color:white; margin-top:30px; opacity:0.8; font-size:0.9rem;">&larr; ปัดรูป &rarr;</p></div><div id="stage-3" class="stage"><div class="winged-wrapper"><div class="wing right"></div><div class="wing left"></div><div class="heart-trigger" onclick="goToStage(4)" title="แตะหัวใจเพื่อเปิด"></div><div id="flying-envelope"><div class="top"></div><div class="sides"></div></div></div><p style="color:white; margin-top:0px; font-size:1rem; font-weight:bold;">Tap the Heart ❤️</p></div><div id="stage-4" class="stage"><div class="book-wrapper" id="myBook" onclick="toggleBook()"><div class="book-cover"><div class="front-side">Happy<br>Valentine</div><div class="back-side"></div></div><div class="inside-page"><div class="book-msg" id="book-msg-content"></div><div class="book-signature" id="book-signature"></div><div style="font-size:2rem; margin-top:20px;">🌹</div></div></div><p class="hint-text" id="book-hint">Tap to open the card</p><button class="btn-nav" id="btn-stage5" onclick="goToStage(5)">Play Game 🧩</button></div><div id="stage-5" class="stage"><div class="firework-bg" style="display:none;"><div class="firework"></div><div class="firework"></div><div class="firework"></div></div><div id="puzzle-wrapper" class="puzzle-container"><h2 style="color:white; margin-bottom:10px; text-shadow:0 2px 4px rgba(0,0,0,0.5);">ลองเล่นดูสิ</h2><div style="color:white; font-size:0.9rem; margin-bottom:10px; opacity:0.8;">Drag pieces to swap them</div><div class="preview-box" id="puzzle-preview"></div><div class="game-board" id="game-board"></div></div><div id="finale-content" class="finale-content"><h1 class="neon-text" style="font-family: 'Mali', cursive; line-height: 1.5; padding-top: 10px;"> เย้!! เก่งมาก </h1><p style="font-family: 'Mali', cursive; font-size:1rem; line-height:2.0; margin: 20px 0; padding: 5px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.5);"> รักกันไปนานๆ เลยนะ.... </p><button class="btn-nav" style="color:#2c5364;" onclick="location.reload()">Replay Again</button></div></div></div><div id="player-container"></div> <script>
+        // --- CONFIG ---
+        const CUSTOM_YOUTUBE_URL = "https://youtu.be/cJKYHF6SzPs?si=cluxUpz_YukuFkgO";
+        const BOOK_MESSAGE = `สวัสดี! สุขสันต์วันแห่งความรัก<br>ขอบคุณที่เลือกผมในวันนั้น<br>ขอบคุณที่รักกันในทุก ๆ วัน<br>ขอรักของเมียตู่ตลอดไป`;
+        const BOOK_SIGNATURE = "- มอสคุง 💖 -";
+        // *** รูปภาพสำหรับจิ๊กซอว์ ***
+        const PUZZLE_IMAGE = "https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770881064656_v3c5nms.jpg?alt=media&token=15584b2d-7000-4832-8fb9-2225b448543d";
+
+        // --- YOUTUBE SETUP ---
+        function extractVideoID(url) {
+            var match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/);
+            return (match && match[7].length == 11) ? match[7] : false;
+        }
+        const VIDEO_ID = extractVideoID(CUSTOM_YOUTUBE_URL);
+        var player;
+        function onYouTubeIframeAPIReady() {
+            if(VIDEO_ID) {
+                player = new YT.Player('player-container', {
+                    height: '0', width: '0', videoId: VIDEO_ID,
+                    playerVars: { 'playsinline': 1, 'controls': 0, 'loop': 1 },
+                });
+            }
+        }
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0]);
+
+        // --- SNOW EFFECT ---
+        function createSnow() {
+            const container = document.getElementById('snow-container');
+            const count = window.innerWidth < 600 ? 20 : 40; 
+            for(let i=0; i<count; i++) {
+                const flake = document.createElement('div');
+                flake.classList.add('snowflake');
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.width = (Math.random() * 8 + 4) + 'px'; 
+                flake.style.height = flake.style.width;
+                flake.style.animationDuration = (Math.random() * 10 + 10) + 's'; 
+                flake.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(flake);
+            }
+        }
+        createSnow();
+
+        // --- NAVIGATION ---
+        function playMusicOnly() {
+            if(player && player.playVideo) { player.playVideo(); player.setVolume(70); }
+            document.getElementById('vinyl-disc').classList.add('spinning');
+        }
+
+        function goToStage(num) {
+            if(num === 2 && player && player.getPlayerState && player.getPlayerState() !== 1) { playMusicOnly(); }
+
+            const shutter = document.getElementById('shutter');
+            shutter.classList.remove('flash');
+            void shutter.offsetWidth; 
+            shutter.classList.add('flash'); 
+
+            if(num === 5) {
+                document.body.classList.add('night-mode');
+                initPuzzleGame(); 
+            } else {
+                document.body.classList.remove('night-mode');
+            }
+
+            setTimeout(() => {
+                document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+                document.getElementById(`stage-${num}`).classList.add('active');
+                
+                if(num === 2) initSwipePolaroids();
+                if(num === 4) initBookContent();
+            }, 600);
+        }
+
+        // --- STAGE 2: SWIPE ---
+        function initSwipePolaroids() {
+            const cards = Array.from(document.querySelectorAll('.polaroid'));
+            function updateActiveCard() {
+                cards.forEach((card, index) => {
+                    if (index === cards.length - 1) card.style.pointerEvents = 'auto';
+                    else card.style.pointerEvents = 'none';
+                });
+                if (cards.length === 0) setTimeout(() => goToStage(3), 500);
+            }
+            updateActiveCard();
+
+            cards.forEach(card => {
+                let isDrag = false, startX = 0;
+                const start = (x) => { isDrag=true; startX=x; card.classList.add('moving'); };
+                const move = (x) => { 
+                    if(!isDrag)return; 
+                    let dx = x - startX; 
+                    card.style.transform = `translate(${dx}px, ${Math.abs(dx)*0.1}px) rotate(${dx*0.05}deg)`; 
+                };
+                const end = (x) => {
+                    if(!isDrag)return; isDrag=false; card.classList.remove('moving');
+                    if(Math.abs(x-startX)>80) {
+                        card.classList.add(x>startX?'fly-right':'fly-left');
+                        setTimeout(()=>{ 
+                            card.style.display='none'; 
+                            cards.splice(cards.indexOf(card),1); 
+                            updateActiveCard(); 
+                        }, 300);
+                    } else card.style.transform='';
+                };
+                card.addEventListener('touchstart', e=>start(e.touches[0].clientX));
+                card.addEventListener('touchmove', e=>{e.preventDefault(); move(e.touches[0].clientX)});
+                card.addEventListener('touchend', e=>end(e.changedTouches[0].clientX));
+                card.addEventListener('mousedown', e=>start(e.clientX));
+                document.addEventListener('mousemove', e=>move(e.clientX));
+                document.addEventListener('mouseup', e=>end(e.clientX));
+            });
+        }
+
+        // --- STAGE 4: BOOK LOGIC ---
+        function initBookContent() {
+            document.getElementById('book-msg-content').innerHTML = BOOK_MESSAGE;
+            document.getElementById('book-signature').innerText = BOOK_SIGNATURE;
+        }
+
+        function toggleBook() {
+            const book = document.getElementById('myBook');
+            const btn = document.getElementById('btn-stage5');
+            const hint = document.getElementById('book-hint');
+            
+            book.classList.toggle('open');
+
+            if(book.classList.contains('open')) {
+                hint.style.opacity = 0;
+                setTimeout(() => {
+                    btn.style.opacity = 1;
+                    btn.style.pointerEvents = 'auto';
+                }, 800); 
+            } else {
+                hint.style.opacity = 1;
+                btn.style.opacity = 0;
+                btn.style.pointerEvents = 'none';
+            }
+        }
+
+        // --- STAGE 5: PUZZLE GAME (DRAG & DROP 3x3) ---
+        let draggedElement = null;
+        let ghostElement = null;
+
+        function initPuzzleGame() {
+            const board = document.getElementById('game-board');
+            const preview = document.getElementById('puzzle-preview');
+            board.innerHTML = ''; 
+            preview.style.backgroundImage = `url(${PUZZLE_IMAGE})`;
+
+            // 3x3 Grid = 9 pieces
+            let pieces = Array.from({length: 9}, (_, i) => i);
+            pieces.sort(() => Math.random() - 0.5);
+
+            pieces.forEach((index, i) => {
+                const piece = document.createElement('div');
+                piece.classList.add('puzzle-piece');
+                piece.style.backgroundImage = `url(${PUZZLE_IMAGE})`;
+                
+                // 3x3 Grid Math:
+                // Row/Col Logic (0-2)
+                const row = Math.floor(index / 3);
+                const col = index % 3;
+                
+                // Position percentages: 0%, 50%, 100%
+                const xPos = col * 50; 
+                const yPos = row * 50;
+                
+                piece.style.backgroundPosition = `${xPos}% ${yPos}%`;
+                piece.dataset.index = index; 
+                
+                // Add Drag Listeners
+                addDragListeners(piece);
+                board.appendChild(piece);
+            });
+        }
+
+        function addDragListeners(piece) {
+            // Touch Events (Mobile)
+            piece.addEventListener('touchstart', handleDragStart, {passive: false});
+            piece.addEventListener('touchmove', handleDragMove, {passive: false});
+            piece.addEventListener('touchend', handleDragEnd);
+
+            // Mouse Events (Desktop)
+            piece.addEventListener('mousedown', handleDragStart);
+        }
+
+        // Unified Drag Logic
+        function handleDragStart(e) {
+            e.preventDefault();
+            const target = e.target;
+            if (target.classList.contains('correct')) return; // Optional: Lock correct pieces
+
+            draggedElement = target;
+            draggedElement.classList.add('dragging-source');
+
+            // Create Ghost Element (Visual Copy)
+            ghostElement = document.createElement('div');
+            ghostElement.classList.add('drag-ghost');
+            ghostElement.style.backgroundImage = draggedElement.style.backgroundImage;
+            ghostElement.style.backgroundPosition = draggedElement.style.backgroundPosition;
+            document.body.appendChild(ghostElement);
+
+            // Set initial position
+            moveGhost(e);
+
+            // Listen for global move/up for Mouse
+            if(e.type === 'mousedown') {
+                document.addEventListener('mousemove', handleDragMove);
+                document.addEventListener('mouseup', handleDragEnd);
+            }
+        }
+
+        function handleDragMove(e) {
+            e.preventDefault();
+            if (!ghostElement) return;
+            moveGhost(e);
+        }
+
+        function moveGhost(e) {
+            // Get coordinates (Touch or Mouse)
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            ghostElement.style.left = (clientX - ghostElement.offsetWidth / 2) + 'px';
+            ghostElement.style.top = (clientY - ghostElement.offsetHeight / 2) + 'px';
+        }
+
+        function handleDragEnd(e) {
+            if (!draggedElement) return;
+
+            // Clean up listeners for mouse
+            document.removeEventListener('mousemove', handleDragMove);
+            document.removeEventListener('mouseup', handleDragEnd);
+
+            // Get drop target coordinates
+            let clientX, clientY;
+            if (e.changedTouches) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            // Hide ghost temporarily to see what's underneath
+            ghostElement.style.display = 'none';
+            let dropTarget = document.elementFromPoint(clientX, clientY);
+            
+            // Logic to find the nearest puzzle piece if dropped on sub-element
+            if(dropTarget && !dropTarget.classList.contains('puzzle-piece')) {
+                dropTarget = dropTarget.closest('.puzzle-piece');
+            }
+
+            // Perform Swap
+            if (dropTarget && dropTarget.classList.contains('puzzle-piece') && dropTarget !== draggedElement) {
+                swapPieces(draggedElement, dropTarget);
+            }
+
+            // Cleanup
+            if(ghostElement) ghostElement.remove();
+            draggedElement.classList.remove('dragging-source');
+            draggedElement = null;
+            ghostElement = null;
+
+            checkWin();
+        }
+
+        function swapPieces(p1, p2) {
+            const tempBg = p1.style.backgroundPosition;
+            const tempIndex = p1.dataset.index;
+
+            p1.style.backgroundPosition = p2.style.backgroundPosition;
+            p1.dataset.index = p2.dataset.index;
+
+            p2.style.backgroundPosition = tempBg;
+            p2.dataset.index = tempIndex;
+        }
+
+        function checkWin() {
+            const pieces = document.querySelectorAll('.puzzle-piece');
+            let isWin = true;
+            pieces.forEach((p, i) => {
+                if (parseInt(p.dataset.index) !== i) {
+                    isWin = false;
+                }
+            });
+
+            if (isWin) {
+                setTimeout(showSuccess, 1500);
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('puzzle-wrapper').style.display = 'none';
+            document.querySelector('.firework-bg').style.display = 'block';
+            createConfetti();
+            document.getElementById('finale-content').style.display = 'flex';
+        }
+
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f', '#fff'];
+            const container = document.getElementById('confetti-container');
+            
+            for(let i=0; i<100; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                conf.style.animationDelay = (Math.random() * 2) + 's';
+                container.appendChild(conf);
+            }
+        }
+    </script> </body></html>
