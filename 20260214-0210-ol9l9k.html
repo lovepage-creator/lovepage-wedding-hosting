@@ -1,0 +1,550 @@
+<!DOCTYPE html><html lang="th"><head><base href="https://lovepage-premium-card.netlify.app/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>MY BOO.🧸🩵💐</title><link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;400;700&display=swap" rel="stylesheet"><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet"/><link rel="preload" as="image" href="/img/1.jpg"><link rel="preload" as="image" href="/img/2.jpg"><link rel="preload" as="image" href="/img/3.jpg"><link rel="preload" as="image" href="/img/4.jpg"><link rel="preload" as="image" href="/img/bg1.jpg"><link rel="preload" as="image" href="/img/cake4.png"><link rel="preload" as="image" href="/img/balloon1.png"><link rel="preload" as="image" href="/img/cake6.png"><link rel="preload" as="image" href="/img/gift4.png"><link rel="preload" as="image" href="/img/5.jpg"><link rel="preload" as="image" href="/img/mes1.png"><link rel="preload" as="image" href="/img/photo2.png"> <style>
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --page1: #e63b7a;
+        }
+
+        * { box-sizing: border-box; }
+        ::-webkit-scrollbar { display: none; }
+        html { scrollbar-width: none; -ms-overflow-style: none; }
+
+        body {
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh;
+            overflow: hidden; 
+            font-family: 'Mali', cursive;
+            background-color: #000;
+        }
+
+        /* --- PAGE STRUCTURE --- */
+        .page {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-y: auto; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 0.5s ease;
+            padding-bottom: 20px;
+        }
+
+        .page.active {
+            display: flex;
+            animation: fadeInPage 0.8s ease-in-out;
+        }
+
+        @keyframes fadeInPage { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ปุ่มย้อนกลับ */
+        .btn-back {
+            margin-top: 20px;
+            padding: 8px 20px;
+            background-color: #ffcc99;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(56, 56, 56, 0.121);
+            z-index: 10;
+            border: none;
+            flex-shrink: 0;
+        }
+        .btn-back:hover { transform: scale(1.1); background-color: #ee9e68; }
+
+        /* --- PAGE 1: INDEX --- */
+        #page-index { background-image: url('/img/bg1.jpg'); justify-content: center; }
+        .balloon-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+        .balloon { position: absolute; width: 150px; height: 180px; background-size: cover; opacity: 0; animation: balloonFadeIn 0.5s ease-in forwards; }
+        @media(min-width: 768px) { .balloon { width: 250px; height: 300px; } }
+        @keyframes balloonFadeIn { to { opacity: 1; transform: scale(1); } }
+        @keyframes floatAway { to { opacity: 0; transform: translateY(-50vh) scale(0); } }
+
+        .intro-content { display: none; flex-direction: column; align-items: center; text-align: center; z-index: 10; animation: fadeInContent 1.5s ease-in forwards; }
+        @keyframes fadeInContent { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .intro-text { font-size: clamp(2rem, 5vw, 4rem); font-weight: bold; color: var(--page1); margin: 20px 0; }
+        .intro-img { width: 60vw; max-width: 300px; border-radius: 10px; animation: zoomCake 2s infinite alternate ease-in-out; }
+        @keyframes zoomCake { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+
+        .special-btn { margin-top: 30px; padding: 15px 40px; font-size: 20px; cursor: pointer; background: var(--page1); color: white; border: none; border-radius: 50px; font-weight: bold; box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4); transition: transform 0.2s, box-shadow 0.2s; }
+        .special-btn:hover { transform: scale(1.1); box-shadow: 0 8px 20px rgba(255, 117, 140, 0.6); }
+
+        /* --- PAGE 2: NAVIGATOR --- */
+        #page-navigator { background-image: url('/img/bg2.jpg'); justify-content: center; padding: 20px; overflow: hidden; }
+        .menu-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; max-width: 400px; }
+        .menu-item { width: 130px; height: 130px; background: rgba(255,255,255,0.4); border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .menu-item:hover { transform: translateY(-5px); background: rgba(255,255,255,0.7); }
+        .menu-img { width: 100%; height: 60%; object-fit: contain; border-radius: 10px; margin-bottom: 5px; }
+        .menu-name { font-size: 1rem; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); margin: 0; font-weight: bold; }
+
+        /* --- PAGE 3: WISHES --- */
+        #page-wishes { background-image: url('/img/bg2.jpg'); padding-top: 8vh; }
+        .chat-container { width: 90%; max-width: 380px; height: 70vh; background: #d0e0f0; border-radius: 10px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; position: relative; }
+        .chat-header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-weight: bold; flex-shrink: 0; z-index: 5; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; padding: 20px 15px; }
+        .chat-msg { max-width: 80%; padding: 10px 15px; border-radius: 18px 18px 18px 0; background: #fff; align-self: flex-start; font-size: 14px; opacity: 0; transform: translateY(20px); transition: 0.5s; box-shadow: 1px 1px 3px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .chat-msg.show { opacity: 1; transform: translateY(0); }
+        .chat-footer { background: #fff; padding: 10px; display: flex; align-items: center; border-top: 1px solid #ddd; flex-shrink: 0; }
+        .chat-footer input { width: 100%; padding: 8px; border-radius: 20px; border: 1px solid #eee; background: #f1f1f1; }
+
+        /* --- PAGE 4: GIFT --- */
+        #page-gift { background-image: url('/img/bg1.jpg'); justify-content: center; }
+        .gift-img { width: 250px; cursor: pointer; animation: bounce 1.5s infinite alternate; }
+        .gift-text { font-size: 3rem; color: var(--page1); font-weight: bold; margin-bottom: 20px; text-align: center; }
+        @keyframes bounce { to { transform: translateY(-20px); } }
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 100; }
+        .popup-overlay.active { opacity: 1; visibility: visible; }
+        .popup-content { background: white; padding: 20px; border-radius: 15px; width: 85%; max-width: 320px; text-align: center; position: relative; }
+        .close-popup { position: absolute; top: 5px; right: 10px; font-size: 24px; cursor: pointer; background: none; border: none; }
+
+        /* --- PAGE 5: MEMORY --- */
+        #page-memory { background-image: url('/img/bg2.jpg'); padding-top: 80px;}
+        .feed-container { width: 95%; max-width: 420px; height: 75vh; overflow-y: auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .ig-card { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .ig-header { display: flex; justify-content: space-between; padding: 10px; align-items: center; }
+        .ig-profile { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 14px; }
+        .ig-profile img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+        .ig-img { width: 100%; display: block; }
+        .ig-actions { padding: 10px; font-size: 20px; display: flex; justify-content: space-between; }
+        .ig-likes, .ig-cap { padding: 0 10px; font-size: 14px; margin: 5px 0; text-align: left; }
+
+        /* --- PAGE 6: MINIGAME --- */
+        #page-minigame { background-image: url('/img/bg2.jpg'); justify-content: flex-start; padding-top: 10vh;}
+        .game-container { display: flex; flex-direction: column; width: 90%; max-width: 700px; background: rgba(255,255,255,0.85); border-radius: 20px; padding: 20px; border: 2px solid #ffb6c1; align-items: center; gap: 20px; }
+        @media(min-width: 768px) { .game-container { flex-direction: row; } }
+        .scratch-area { width: 100%; max-width: 300px; height: 250px; position: relative; border: 2px dashed #ff69b4; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+        canvas { touch-action: none; position: absolute; top: 0; left: 0; z-index: 2; }
+        
+        /* --- PAGE 7: ANNIVERSARY (UPDATED RESPONSIVE) --- */
+        #page-anniversary {
+             background-image: url('/img/bg2.jpg');
+            /* แก้ไข 1: เปลี่ยนจาก center เป็น flex-start เพื่อไม่ให้รูปชนขอบบน */
+            justify-content: flex-start; 
+            overflow-y: auto;
+            /* แก้ไข 2: เพิ่ม padding ด้านบน เพื่อให้มีระยะห่างจากขอบจอ */
+            padding: 20px 20px 40px 20px; 
+            
+            /* Local Vars */
+            --time-grad1: #ff758c;
+            --time-grad2: #ff7eb3;
+            --time-shadow: rgba(255, 118, 137, 0.4);
+            --time-num: #fff;
+        }
+
+        .anni-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            /* แก้ไข 3: ลบ margin-top เดิมออก เพราะเราใช้ padding ที่ตัวแม่แล้ว */
+            margin-top: 0; 
+            
+            background: rgba(255, 255, 255, 0.351);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            
+            /* เพิ่ม animation ให้เด้งขึ้นมาสวยๆ */
+            animation: slideUp 0.8s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Desktop Layout */
+        @media (min-width: 768px) {
+            #page-anniversary {
+                justify-content: center; /* ถ้าจอคอม ให้กลับมาอยู่ตรงกลางเหมือนเดิม */
+                padding-top: 0;
+            }
+            .anni-container {
+                flex-direction: row;
+                padding: 40px;
+                gap: 40px;
+                max-width: 800px;
+            }
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px; 
+            aspect-ratio: 1 / 1;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            background: #fff; /* พื้นหลังสีขาวกันภาพโหลดไม่ทัน */
+            flex-shrink: 0;
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute; /* สำคัญมาก! ต้องมีบรรทัดนี้รูปถึงจะซ้อนกัน */
+            top: 0; left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out; /* เอฟเฟกต์เฟด */
+            z-index: 0;
+        }
+        
+        .image-container img.active { 
+            opacity: 1; 
+            z-index: 1; /* ดันรูปที่ Active ขึ้นมาบนสุด */
+        }
+        
+        /* ... (ส่วนอื่นๆ ของ Timer คงเดิม) ... */
+        .timer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        .timer-container h1 { 
+            font-size: clamp(1.5rem, 4vw, 2rem); /* Auto resize font */
+            color: var(--page1); 
+            margin-bottom: 5px; 
+        }
+        .timer-container p { margin: 5px 0; color: #555; }
+        
+        #years-months {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--page1);  
+            margin: 15px 0; 
+            font-weight: bold;
+        }
+
+        .countup-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columns always */
+            gap: 15px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .time-box {
+            background: linear-gradient(135deg, var(--time-grad1), var(--time-grad2));
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%; /* Fill grid cell */
+            text-align: center;
+            box-shadow: 0 6px var(--time-shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-box h2 { 
+            margin: 0; 
+            color: var(--time-num); 
+            font-size: clamp(1.5rem, 5vw, 2rem); /* Dynamic font size */
+        }
+        .time-box p { 
+            margin: 0; 
+            font-size: 0.8rem; 
+            color: #fff; 
+        }
+
+        /* Music Button & Player */
+        #music-start-btn { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(134, 123, 131, 0.502); color: #fff; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; z-index: 9999; font-size: 1.2rem; }
+        #player-container { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; z-index: -100; }
+
+        /* Snow */
+        .snowflake { position: fixed; top: -20px; color: white; font-size: 1.2em; user-select: none; pointer-events: none; z-index: 99999; text-shadow: 0 0 3px rgba(255,255,255,0.8); }
+        @keyframes snowFall { 0% { transform: translateY(0) translateX(0); opacity: 1; } 100% { transform: translateY(110vh) translateX(20px); opacity: 0.5; } }
+   
+        /* --- IG LIKE EFFECT --- */
+/* กรอบครอบรูปเพื่อให้วางหัวใจซ้อนได้ */
+.ig-img-wrapper {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* หัวใจสีขาวที่จะเด้งขึ้นมาบนรูป */
+.big-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* เริ่มต้นซ่อนไว้ */
+    font-size: 80px;
+    color: rgba(255, 0, 60, 0.9); /* สีขาวโปร่งแสงนิดๆ */
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.3)); /* เงาเพื่อให้เห็นชัด */
+    pointer-events: none; /* กดทะลุได้ */
+    z-index: 10;
+}
+
+/* อนิเมชั่นหัวใจเด้ง */
+.big-heart.animate {
+    animation: popHeart 0.8s ease-out forwards;
+}
+
+@keyframes popHeart {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    15% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    30% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; }
+    45% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    80% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; } /* หายไปตอนจบ */
+}
+
+/* เปลี่ยนไอคอนหัวใจด้านล่างเมื่อกดไลค์ */
+.fa-heart.liked {
+    font-weight: 900 !important; /* เปลี่ยนจาก Regular เป็น Solid (FontAwesome logic) */
+    color: red !important;
+    animation: heartBounce 0.3s;
+}
+
+@keyframes heartBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+   </style>
+</head><body><div id="player-container"></div><div id="music-start-btn"><div style="font-size: 3rem; margin-bottom: 20px;">🎁</div></div><section id="page-index" class="page active"><div class="balloon-container" id="intro-balloons"></div><div class="intro-content"><div class="intro-text" id="typewriter-text"></div><img class="intro-img" src="/img/theme1/7.png" alt="Cake"><button class="special-btn" onclick="goToPage('page-navigator')">Special Day 💖</button></div></section><section id="page-navigator" class="page"><div class="menu-grid"><div class="menu-item" onclick="goToPage('page-wishes')"><img src="/img/mes1.png" class="menu-img"><div class="menu-name">คำอวยพร</div></div><div class="menu-item" onclick="goToPage('page-gift')"><img src="/img/gift4.png" class="menu-img"><div class="menu-name">ของขวัญ</div></div><div class="menu-item" onclick="goToPage('page-memory')"><img src="/img/photo2.png" class="menu-img"><div class="menu-name">ความทรงจำ</div></div><div class="menu-item" onclick="goToPage('page-anniversary')"><img src="/img/time3.png" class="menu-img"><div class="menu-name">ช่วงเวลา</div></div></div><!--<button class="btn-back" onclick="goToPage('page-index')">← Home</button>--></section><section id="page-wishes" class="page"><div class="chat-container"><div class="chat-header">จากคนอ้วนเบาหวาน🐷🩷</div><div class="chat-box" id="chat-box"></div><div class="chat-footer"><input type="text" placeholder="Enter a message" disabled><span style="font-size:20px; margin-left:10px;">😊</span></div></div><button class="btn-back" onclick="goToPage('page-navigator')">←</button></section><section id="page-gift" class="page"><div class="gift-text">ลองเปิดเด้อจ้า</div><img class="gift-img" src="/img/cake6.png" onclick="openPopup()"><div class="popup-overlay" id="gift-popup"><div class="popup-content"><button class="close-popup" onclick="closePopup()">×</button><h2>นี่เลย! ของขวัญปีนี้</h2><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771008914619_o4i85cj.jpg?alt=media&token=21580e53-9475-435b-87f6-b4e3e10251c0" style="width:100%; border-radius:10px; margin:10px 0;"><p>ของขวัญที่ดีที่สุดในปีนี้คือเราทั้งคู่นะจ้ะ อิอิ😘</p></div></div><button class="btn-back" onclick="goToPage('page-navigator')">←</button></section><section id="page-memory" class="page"><p style="font-size: 0.8rem;">"เลื่อนดูได้เลยนะ กด Like ให้ด้วยนะ"</p><div class="feed-container"><div class="ig-card"><div class="ig-header"><div class="ig-profile"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009114493_889yj7c.jpg?alt=media&token=d62b5f06-3ef0-44d6-bb53-a31d9c09be6f">เจเจของพิมชา</div></div><div class="ig-img-wrapper" ondblclick="likePost(this)"><i class="fa-solid fa-heart big-heart"></i><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009132735_j67k53e.jpg?alt=media&token=74313cec-53f9-44ad-a639-539b5114eaea" class="ig-img"></div><div class="ig-actions"><div><i class="fa-regular fa-heart action-heart" style="color:red"></i></div></div><p class="ig-likes">362 likes</p><p class="ig-cap">ไว้ไปเที่ยวด้วยกันอีกนะที่รัก</p></div><div class="ig-card"><div class="ig-header"><div class="ig-profile"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009114493_889yj7c.jpg?alt=media&token=d62b5f06-3ef0-44d6-bb53-a31d9c09be6f"> เจเจของพิมชา</div></div><div class="ig-img-wrapper" ondblclick="likePost(this)"><i class="fa-solid fa-heart big-heart"></i><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009174961_w56mn6h.jpg?alt=media&token=553b2974-aec9-45b3-99f4-3f2de4eaf75b" class="ig-img"></div><div class="ig-actions"><div><i class="fa-regular fa-heart action-heart" style="color:red"></i></div></div><p class="ig-likes">512 likes</p><p class="ig-cap">พาเค้าไปหาไรกินอีกเยอะๆเลยน้า</p></div><div class="ig-card"><div class="ig-header"><div class="ig-profile"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009114493_889yj7c.jpg?alt=media&token=d62b5f06-3ef0-44d6-bb53-a31d9c09be6f"> เจเจของพิมชา</div></div><div class="ig-img-wrapper" ondblclick="likePost(this)"><i class="fa-solid fa-heart big-heart"></i><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009212615_dt8wxjy.jpg?alt=media&token=ac6eb369-9665-4886-ac7b-50a997758358" class="ig-img"></div><div class="ig-actions"><div><i class="fa-regular fa-heart action-heart" style="color:red"></i></div></div><p class="ig-likes">620 likes</p><p class="ig-cap">อยู่จับมือเค้าเวลาไปไหนแบบนี้นะ</p></div><div class="ig-card"><div class="ig-header"><div class="ig-profile"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009114493_889yj7c.jpg?alt=media&token=d62b5f06-3ef0-44d6-bb53-a31d9c09be6f"> เจเจของพิมชา</div></div><div class="ig-img-wrapper" ondblclick="likePost(this)"><i class="fa-solid fa-heart big-heart"></i><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009272598_3ckv7oc.jpg?alt=media&token=4f18f5d8-3e5f-48cb-b94e-cea72456be25" class="ig-img"></div><div class="ig-actions"><div><i class="fa-regular fa-heart action-heart" style="color:red"></i></div></div><p class="ig-likes">320 likes</p><p class="ig-cap">รักกันไปนานๆเลย กลับมาจดทะเบียนสมรสกันนะที่รัก</p></div></div><div style="display:flex; gap:10px; margin-bottom: 20px;"><button class="btn-back" onclick="goToPage('page-navigator')">←</button></div></section><section id="page-minigame" class="page"><div class="game-container"><div style="flex:1; text-align:center;"><h1 style="color: var(--page1);">มีอะไรจะบอกแหละที่รัก….</h1><div id="minigame-text" style="background:rgba(250,235,215,0.6); padding:10px; border-radius:15px; margin:15px 0; min-height:80px;"></div><small>(Try scratching off the pink color)</small></div><div class="scratch-area" id="scratch-container"><div style="position:absolute; width:100%; height:100%; background:url('https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009614504_2sz16ai.jpg?alt=media&token=bd9f3036-4681-469a-8c20-8a5dc1c163a0') center/cover;"></div><canvas id="scratch-canvas"></canvas></div></div><button class="btn-back" onclick="goToPage('page-navigator')">←</button></section><section id="page-anniversary" class="page"><div class="anni-container"><div class="image-container"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009132735_j67k53e.jpg?alt=media&token=74313cec-53f9-44ad-a639-539b5114eaea" class="active"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009174961_w56mn6h.jpg?alt=media&token=553b2974-aec9-45b3-99f4-3f2de4eaf75b"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1771009212615_dt8wxjy.jpg?alt=media&token=ac6eb369-9665-4886-ac7b-50a997758358"></div><div class="timer-container"><h1>คบกันมาแล้ว</h1><p>ตั้งแต่ 1 กันยายน 2025</p><h2 id="years-months"></h2><div class="countup-container"><div class="time-box"><h2 id="days">00</h2><p>Days</p></div><div class="time-box"><h2 id="hours">00</h2><p>Hours</p></div><div class="time-box"><h2 id="minutes">00</h2><p>Mins</p></div><div class="time-box"><h2 id="seconds">00</h2><p>Secs</p></div></div></div></div><button class="btn-back" onclick="goToPage('page-navigator')">←</button><button class="btn-back" style="background:#ffb6c1;" onclick="goToPage('page-minigame')">Minigame</button></section> <script>
+        // --- CONFIG ---
+        const CUSTOM_YOUTUBE_URL = "https://youtu.be/P5sHZRicEXg?si=7lBtchsmFteWuLOr"; 
+        
+        // **ตั้งค่าวันเริ่มคบที่นี่ (YYYY-MM-DD)**
+        const START_DATE = "2025-09-01"; 
+
+        // --- YOUTUBE LOGIC ---
+        function extractVideoID(url) { var match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/); return (match && match[7].length == 11) ? match[7] : false; }
+        const VIDEO_ID = extractVideoID(CUSTOM_YOUTUBE_URL);
+        var player;
+        function onYouTubeIframeAPIReady() { if(VIDEO_ID) player = new YT.Player('player-container', { height: '1', width: '1', videoId: VIDEO_ID, playerVars: { 'playsinline': 1, 'controls': 0, 'loop': 1, 'playlist': VIDEO_ID }, events: { 'onReady': (event) => { event.target.setVolume(70); } } }); }
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; document.body.appendChild(tag);
+
+        // --- AUDIO EVENT ---
+        const startBtn = document.getElementById("music-start-btn");
+        startBtn.addEventListener("click", () => {
+            if (player && typeof player.playVideo === 'function') { player.unMute(); player.playVideo(); }
+            startBtn.style.transition = "opacity 0.5s"; startBtn.style.opacity = "0";
+            setTimeout(() => { startBtn.style.display = 'none'; startIntroAnimation(); }, 500);
+        });
+
+        // --- NAVIGATION ---
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+
+            if(pageId === 'page-wishes') resetChatAnimation();
+    
+            if(pageId === 'page-minigame') { 
+                initCanvas(); 
+                startTypingGame(); 
+            } else {
+                // เพิ่มส่วนนี้: ถ้าไม่ได้อยู่ที่หน้า minigame ให้หยุดพิมพ์ทันที
+                if (typingTimer) {
+                    clearTimeout(typingTimer);
+                    typingTimer = null;
+                }
+            }
+
+            if(pageId === 'page-anniversary') { startImageSlider(); updateCountdown(); }
+        }
+
+        // --- ANNIVERSARY LOGIC ---
+        let sliderInterval;
+        function startImageSlider() {
+            if(sliderInterval) clearInterval(sliderInterval);
+            const images = document.querySelectorAll("#page-anniversary .image-container img");
+            if(images.length === 0) return;
+            let currentIndex = 0;
+            sliderInterval = setInterval(() => {
+                images[currentIndex].classList.remove("active");
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add("active");
+            }, 2500);
+        }
+
+        function updateCountdown() {
+            const startDate = new Date(START_DATE);
+            const now = new Date();
+            const diff = now - startDate; 
+            
+            const days = Math.floor(diff / (1000*60*60*24));
+            const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+            const secs = Math.floor((diff % (1000*60)) / 1000);
+
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            if (months < 0) { years--; months += 12; }
+
+            const elYM = document.getElementById("years-months");
+            if(elYM) {
+                elYM.textContent = `💖 ${years} years ${months} months 💖`;
+                document.getElementById("days").textContent = days;
+                document.getElementById("hours").textContent = hours;
+                document.getElementById("minutes").textContent = mins;
+                document.getElementById("seconds").textContent = secs;
+            }
+            requestAnimationFrame(updateCountdown);
+        }
+
+        // --- INTRO ---
+        function startIntroAnimation() {
+            const container = document.getElementById('intro-balloons');
+            for(let i=0; i<30; i++) {
+                setTimeout(() => {
+                    const b = document.createElement('div');
+                    b.classList.add('balloon');
+                    b.style.backgroundImage = "url('/img/balloon1.png')";
+                    // สุ่มตั้งแต่ -10 ถึง 100 (เพื่อให้ล้นจอซ้ายขวาได้ ดูเต็มจอขึ้น)
+                    b.style.left = (Math.random() * 110 - 20) + "vw"; b.style.top = Math.random() * 80 + "vh";
+                    container.appendChild(b);
+                }, i * 100);
+            }
+            setTimeout(() => {
+                document.querySelectorAll('.balloon').forEach(b => b.style.animation = "floatAway 5s ease-in forwards");
+                document.querySelector('.intro-content').style.display = 'flex';
+                typeWriter("Happy Valentine's Day My Boo.", document.getElementById('typewriter-text'));
+                setTimeout(() => { container.innerHTML = ''; }, 5000);
+            }, 3000);
+        }
+
+        // ประกาศตัวแปร Global ไว้เก็บ ID ของ Timer
+        let typingTimer = null; 
+
+        function typeWriter(text, element) {
+            // 1. สั่งหยุดการพิมพ์ครั้งก่อนหน้าทันที (ถ้ามี)
+            if (typingTimer) {
+                clearTimeout(typingTimer);
+                typingTimer = null;
+            }
+
+            element.innerHTML = ""; // ล้างข้อความเก่า
+            let i = 0;
+
+            function type() {
+                if (i < text.length) {
+                    // 2. เพิ่มตัวอักษรทีละตัว
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    // 3. เก็บ ID ของ Timeout ไว้ เพื่อให้สั่งหยุดได้
+                    typingTimer = setTimeout(type, 50); // ปรับความเร็วตรงนี้ (ค่าน้อย = เร็ว)
+                } else {
+                    typingTimer = null; // พิมพ์จบแล้ว เคลียร์ค่าทิ้ง
+                }
+            }
+            type();
+        }
+
+        // --- CHAT ---
+// 1. ใช้เครื่องหมาย ` (Backtick) เพื่อให้พิมพ์หลายบรรทัดในโค้ดได้เลย
+        // อยากให้ขึ้นกล่องใหม่ ก็แค่กด Enter ขึ้นบรรทัดใหม่ครับ
+        const chatMessagesText = `ที่รักจ๋า
+เค้ารักเธอที่สุดเลยน้า
+ดูแลตัวเองให้ดี
+คิดถึงนะ
+วันนี้วันอะไรนะ.....`;
+
+        function resetChatAnimation() {
+            const box = document.getElementById('chat-box');
+            box.innerHTML = '';
+
+            // 2. คำสั่งสำคัญ: .split('\n') คือการตัดคำเมื่อเจอการขึ้นบรรทัดใหม่
+            // .filter(...) ช่วยตัดบรรทัดว่างๆ ทิ้งไป (เผื่อเผลอกด Enter เบิ้ล)
+            const messagesArray = chatMessagesText.split('\n').filter(msg => msg.trim() !== '');
+
+            // 3. วนลูปจาก Array ที่ตัดมาแล้ว
+            messagesArray.forEach((msg, index) => {
+                const div = document.createElement('div');
+                div.classList.add('chat-msg'); 
+                div.innerText = msg.trim(); // ใส่ข้อความลงกล่อง (trim เพื่อลบช่องว่างหน้าหลัง)
+                box.appendChild(div);
+                
+                setTimeout(() => { 
+                    div.classList.add('show'); 
+                    div.scrollIntoView({ behavior: 'smooth', block: 'end' }); 
+                }, index * 1200); // ความเร็วในการเด้ง (1.2 วินาทีต่อ 1 ข้อความ)
+            });
+        }
+        function openPopup() { document.getElementById('gift-popup').classList.add('active'); }
+        function closePopup() { document.getElementById('gift-popup').classList.remove('active'); }
+
+        // --- SCRATCH ---
+        let canvas, ctx, isDrawing = false;
+        function initCanvas() {
+            canvas = document.getElementById('scratch-canvas');
+            ctx = canvas.getContext('2d');
+            const parent = document.getElementById('scratch-container');
+            canvas.width = parent.offsetWidth; canvas.height = parent.offsetHeight;
+            ctx.fillStyle = '#ffb6c1'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            canvas.addEventListener('mousedown', startScratch);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('mouseup', endScratch);
+            canvas.addEventListener('touchstart', (e) => { startScratch(e); e.preventDefault(); }, {passive:false});
+            canvas.addEventListener('touchmove', (e) => { scratch(e); e.preventDefault(); }, {passive:false});
+            canvas.addEventListener('touchend', endScratch);
+        }
+        function startScratch(e) { isDrawing = true; scratch(e); }
+        function endScratch() { isDrawing = false; checkWin(); }
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            let x, y;
+            if (e.touches) { x = e.touches[0].clientX - rect.left; y = e.touches[0].clientY - rect.top; }
+            else { x = e.clientX - rect.left; y = e.clientY - rect.top; }
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2); ctx.fill();
+        }
+        function checkWin() {
+            const data = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+            let clear = 0;
+            for(let i=3; i<data.length; i+=16) { if(data[i]===0) clear++; }
+            if(clear / (data.length/16) > 0.4) {
+                canvas.style.opacity = '0';
+                setTimeout(() => ctx.clearRect(0,0,canvas.width,canvas.height), 500);
+            }
+        }
+        function startTypingGame() {
+            const txt = `Happy Valentine's Day นะคะ ขอบคุณน้าที่ยอมให้เค้าเข้าไปในชีวิต ขอบคุณที่เป็นแฟนที่ดีมากจริงๆ เค้าดีใจมาตลอดตั้งแต่วันแรกที่คบกันจนถึงตอนนี้ อยู่ด้วยกันไปนานๆ เค้ารอนะรอเรากลับมาใช้ชีวิตด้วยกัน อีกอย่างที่รอมากเหมือนกันรอกลับมาจดทะเบียนสมรสกันนะคะ นานแค่ไหนเค้าขอมีแค่เธอที่รักคนเดียว พอละความรักขอพอแค่กับเธอ อยู่รักเค้าละก็ดูแลกันและกันไปนานๆ รักมากเลยน้าบักหำน้อย🧸🩵💐`;
+            typeWriter(txt, document.getElementById('minigame-text'));
+        }
+
+        // --- SNOW ---
+        setInterval(() => {
+            const snow = document.createElement('div');
+            snow.innerHTML = '❄'; snow.classList.add('snowflake');
+            snow.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 3 + 2; const size = Math.random() * 1 + 0.5;
+            snow.style.fontSize = size + 'em';
+            snow.style.animation = `snowFall ${duration}s linear forwards`;
+            document.body.appendChild(snow);
+            setTimeout(() => snow.remove(), duration * 1000);
+        }, 150);
+    </script> <script>
+        function likePost(wrapper) {
+            // 1. เอฟเฟกต์หัวใจเด้งบนรูป (Pop-up Heart)
+            const bigHeart = wrapper.querySelector('.big-heart');
+            
+            // รีเซ็ต Animation (เผื่อกดรัวๆ)
+            bigHeart.classList.remove('animate');
+            void bigHeart.offsetWidth; // Trigger Reflow
+            bigHeart.classList.add('animate');
+
+            // 2. เปลี่ยนไอคอนหัวใจด้านล่าง (Bottom Icon)
+            // หา element พ่อ (ig-card) แล้วหาไอคอนหัวใจข้างใน
+            const card = wrapper.closest('.ig-card');
+            const smallHeart = card.querySelector('.action-heart');
+            
+            // เปลี่ยนจาก fa-regular (โปร่ง) เป็น fa-solid (ทึบ)
+            // หรือใช้ class .liked ที่เราเขียน CSS ไว้
+            smallHeart.classList.remove('fa-regular');
+            smallHeart.classList.add('fa-solid');
+            smallHeart.classList.add('liked');
+        }
+    </script> </body></html>
