@@ -1,0 +1,726 @@
+<!DOCTYPE html><html lang="th"><head><base href="https://lovepage-premium-card.netlify.app/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><title>ถึงพิพัฒน์ </title><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Mali:wght@400;600&family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet"> <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/EasePack.min.js"></script> <style>
+        /* --- 1. COZY THEME SETTINGS --- */
+        :root {
+            --bg-color: #ffd3fc; 
+            --primary: #FFB7B2; 
+            --text-color: #8E7C68;
+
+            --secondary: #B5EAD7; 
+            --wood: #D4B483;      
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%; height: 100dvh;
+            overflow: hidden;
+            font-family: 'Mali', cursive;
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex; justify-content: center; align-items: center;
+            touch-action: none; user-select: none;
+        }
+
+        /* Bg Pattern */
+        body::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(#FFB7B2 15%, transparent 16%), radial-gradient(#FFB7B2 15%, transparent 16%);
+            background-size: 40px 40px; background-position: 0 0, 20px 20px;
+            opacity: 0.1; z-index: -1;
+        }
+        /* ===== FLOATING HEARTS EFFECT ===== */
+.hearts-container{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.heart-bg{
+    position: absolute;
+    bottom: -40px;
+    color: #FF9AA2;
+    opacity: 0.35;
+    animation-name: floatHeart;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+}
+
+@keyframes floatHeart{
+    0%{
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    10%{
+        opacity: 0.35;
+    }
+    100%{
+        transform: translateY(-120vh) scale(1.4);
+        opacity: 0;
+    }
+}
+
+
+        /* --- STAGE SYSTEM --- */
+        .stage-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+        .stage {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: 0.8s ease; visibility: hidden;
+        }
+        .stage.active { opacity: 1; pointer-events: all; visibility: visible; }
+
+        /* Button */
+        .btn-cozy {
+            background: var(--primary); color: white; border: none;
+            padding: 12px 30px; border-radius: 20px;
+            font-family: 'Fredoka', sans-serif; font-size: 1.1rem;
+            cursor: pointer; box-shadow: 0 4px 0 #E27D86;
+            transition: transform 0.1s, box-shadow 0.1s;
+            margin-top: 20px; z-index: 100;
+        }
+        .btn-cozy:active { transform: translateY(4px); box-shadow: 0 0 0 #E27D86; }
+
+        /* ================= STAGE 1, 2, 3, 5 CSS (Cozy Original) ================= */
+/* ================= STAGE 1: COZY DOOR (UPDATED) ================= */
+        .door-scene-wrapper {
+            position: relative;
+            width: 220px;
+            height: 320px;
+            cursor: pointer;
+            perspective: 1000px; /* เพื่อให้การเปิดประตูมีมิติ 3D */
+            margin-top: -30px;
+            transition: transform 1.5s ease-in-out, opacity 1.5s ease; /* สำหรับตอนเดินเข้า */
+        }
+
+        /* กรอบประตู (Arch Frame) */
+        .door-frame {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--wood); /* สีไม้ */
+            border-radius: 110px 110px 0 0; /* ทำเป็นทรงโค้ง */
+            box-shadow: 0 10px 0 rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 15px 15px 0 15px; /* ความหนาวงกบ */
+        }
+
+        /* ช่องว่างหลังประตู (เมื่อเปิดจะเห็นสีนี้) */
+        .door-void {
+            width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #4a3b2a, #2c2216);
+            border-radius: 95px 95px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* แสงสว่างที่จะพุ่งออกมาตอนเปิด */
+        .door-light {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #fff, transparent);
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        /* บานประตู */
+        .door {
+            width: 100%; height: 100%;
+            background: var(--primary); /* สีชมพูพีช */
+            border-radius: 95px 95px 0 0;
+            position: absolute;
+            top: 0; left: 0;
+            transform-origin: left center; /* จุดหมุนอยู่ทางซ้าย */
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid rgba(255,255,255,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 40px;
+            z-index: 2;
+        }
+
+        /* ลวดลายบนประตู */
+        .door-panel {
+            width: 70%; height: 40%;
+            border: 2px dashed rgba(255,255,255,0.5);
+            border-radius: 50px 50px 10px 10px;
+            margin-bottom: 20px;
+        }
+
+        /* ลูกบิด */
+        .knob {
+            width: 15px; height: 15px;
+            background: #D4AF37; /* สีทอง */
+            border-radius: 50%;
+            position: absolute;
+            right: 20px;
+            top: 55%;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* พรมเช็ดเท้า */
+        .mat {
+            position: absolute;
+            bottom: -15px;
+            width: 120%;
+            left: -10%;
+            height: 15px;
+            background: #8E7C68;
+            border-radius: 10px;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        /* --- ANIMATION STATES --- */
+        
+        /* 1. เปิดประตู */
+        .door-scene-wrapper.open .door {
+            transform: rotateY(-115deg); /* หมุนเปิดเข้าไป */
+        }
+        
+        /* 2. แสงส่องออกมา */
+        .door-scene-wrapper.open .door-light {
+            opacity: 1;
+            transition-delay: 0.5s;
+        }
+
+        /* 3. ซูมเข้า (Walk in) */
+        .door-scene-wrapper.enter {
+            transform: scale(3.5); /* ขยายใหญ่เหมือนเดินเข้าไป */
+            opacity: 0; /* จางหายไป */
+        }
+        
+        .photos-container { position: relative; width: 340px; height: 400px; margin-top: -30px; }
+        .clothesline { width: 100%; height: 2px; background: var(--text-color); position: absolute; left: 0; }
+        .clothesline.top { top: 25%; } .clothesline.bottom { top: 65%; }
+        .photo-hanger { position: absolute; transform-origin: top center; animation: sway 3s infinite ease-in-out alternate; }
+        .polaroid-mini { background: white; padding: 6px 6px 20px 6px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); width: 85px; transform: rotate(var(--rot)); transition: transform 0.3s; cursor: pointer; }
+        .polaroid-mini img { width: 100%; height: 85px; object-fit: cover; background: #eee; pointer-events: none;}
+        .clip { width: 8px; height: 15px; background: #A0522D; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); }
+        .photo-hanger.zoomed { z-index: 100; animation: none; top: 50% !important; left: 50% !important; }
+        .photo-hanger.zoomed .polaroid-mini { transform: translate(-50%, -50%) scale(2.8) rotate(0deg); }
+        @keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+
+        .coffee-table-scene { position: relative; width: 300px; height: 400px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+        .heart-meter-wrapper { position: absolute; top: 10px; width: 200px; height: 180px; }
+        .heart-bg-shape { width: 100%; height: 100%; background-color: #E0E0E0; mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center/contain; -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center/contain; position: relative; }
+        .heart-fill { position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background-color: #FF6B6B; transition: height 0.5s ease-in-out; }
+        .floating-bubble { position: absolute; width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; background-size: cover; background-position: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; pointer-events: none; }
+        .table { width: 280px; height: 20px; background: var(--wood); border-radius: 5px; position: absolute; bottom: 50px; box-shadow: 0 10px 0 #B49365; }
+        .table-legs { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; }
+        .leg { width: 15px; height: 50px; background: #B49365; }
+        .cup-container { position: absolute; bottom: 75px; cursor: pointer; transition: transform 0.1s; }
+        .cup-container:active { transform: scale(0.95); }
+        .cup-1 { left: 50px; } .cup-2 { right: 50px; }
+        .cup { width: 50px; height: 40px; background: white; border-radius: 0 0 25px 25px; position: relative; border: 3px solid var(--primary); }
+        .cup::after { content: ''; position: absolute; top: 5px; right: -15px; width: 15px; height: 20px; border: 3px solid var(--primary); border-radius: 50%; }
+
+        .note-paper { width: 300px; padding: 30px; background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); background-image: radial-gradient(#eee 15%, transparent 16%); background-size: 20px 20px; border-radius: 10px; position: relative; transform: rotate(-2deg); }
+        .tape-corner { width: 100px; height: 30px; background: rgba(255, 255, 255, 0.5); position: absolute; top: -10px; left: 50%; transform: translateX(-50%); border: 1px solid #ddd; opacity: 0.7; }
+        .cursor { animation: blink 1s infinite; border-right: 2px solid #555; }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        /* ================= STAGE 4: GASHAPON (CONVERTED CSS) ================= */
+        /* Text Stroke Logic */
+        .stroke-text {
+            text-shadow: 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white;
+            filter: drop-shadow(0px 2px 0px rgba(0, 0, 0, 0.2));
+        }
+
+        .dim { transition: 0.5s linear; }
+        .dim[data-animate] { filter: brightness(0.6) saturate(0.8); }
+
+        .confetti {
+            position: absolute; top: 0; left: 0; overflow: hidden; width: 100%; height: 100%;
+            z-index: 10; pointer-events: none; perspective: 100vmin;
+        }
+        .confetti span {
+            --size: 5; display: block; position: absolute;
+            width: calc(var(--size) * 1px); height: calc(var(--size) * 1px);
+            background-color: blue; animation: rotate linear calc(var(--rs) * 1s) infinite both;
+        }
+
+        #gasha-app { width: 100%; height: 100%; position: relative; }
+        #gasha-app .container { width: 100%; height: 100%; overflow: hidden; position: relative; }
+        
+        /* Machine Layer */
+        #gasha-app .game-layer {
+            width: 100%; height: 100%; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+            /* Background removed to show cozy theme */
+        }
+
+        #gasha-app .machine-container { position: relative; white-space: nowrap; transform: scale(0.85); }
+        #gasha-app .machine { position: relative; z-index: 1; max-height: 80vh; pointer-events: none; }
+        #gasha-app .backboard {
+            z-index: 0; width: 15vh; height: 13vh; top: 65%; left: 48%;
+            background-color: #e288bb; position: absolute;
+        }
+
+        /* Title */
+        #gasha-app .title {
+            position: absolute; display: block; top: 10%; width: 100%;
+            text-align: center; font-size: 5vh; z-index: 3; color: #ad8bd6;
+        }
+        #gasha-app .title span { animation: blink 0.8s linear both infinite; }
+        
+        #gasha-app .price {
+            z-index: 3; position: absolute; color: #fb91c9; font-size: 2.5vh;
+            top: 80%; left: 15%; font-family: 'M PLUS Rounded 1c', sans-serif; font-weight: bold;
+        }
+        #gasha-app .handle {
+            z-index: 3; position: absolute; height: 3.9vh; left: 13%; top: 69%; cursor: pointer;
+        }
+        #gasha-app .balls {
+            position: absolute; top: 22%; left: 2%; width: 96%; height: 34.5%;
+        }
+        #gasha-app .pointer {
+            position: absolute; height: 15vh; top: 75%; left: 15%; z-index: 5; pointer-events: none; opacity: 0;
+        }
+        #gasha-app .pointer img {
+            height: 100%; display: block; transform: rotate(-30deg); transform-origin: 0% 0%;
+            animation: click 1s ease-in-out infinite both;
+        }
+
+        /* UI Layer */
+        #gasha-app .ui-layer {
+            width: 100%; height: 100%; overflow: hidden; position: absolute;
+            top: 0; left: 0; z-index: 1; pointer-events: none;
+        }
+        #gasha-app .title-container {
+            width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0; z-index: 10;
+        }
+        #gasha-app .title-container .title h2 {
+            text-align: center; font-size: 5vh; color: #f06e5b; margin-top: 50px;
+        }
+        
+        #gasha-app .prize-container {
+            width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0;
+        }
+        #gasha-app .prize-ball-container {
+            width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0;
+        }
+        #gasha-app .prize-reward-container {
+            width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0; z-index: 1; opacity: 0;
+        }
+        #gasha-app .prize-reward-container > * {
+            display: block; position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #gasha-app .prize-reward-container .prize img { height: 50vh; }
+        #gasha-app .prize-reward-container .shine img {
+            height: 100vh; animation: spin linear 5s infinite forwards;
+        }
+
+        /* Ball */
+        .g-ball {
+            --size: 8vh;
+            --outline: #4c3fc2; --color1: #2facff; --color2: #ff8ff6;
+            width: var(--size); height: var(--size); border-radius: 100%;
+            background-color: var(--color1); border: solid 0.8vh var(--outline);
+            position: absolute; overflow: hidden;
+        }
+        .g-ball::after {
+            content: ''; display: block; position: absolute; top: 50%;
+            height: 200%; width: 200%; background-color: var(--color2);
+            border-radius: 100%; border: inherit; transform: translate(-25%, -5%);
+        }
+
+        /* Animations */
+        @keyframes blink { 0% { color: #ffc7e5; } 20% { color: #fcff33; } 100% { color: #ffc7e5; } }
+        @keyframes wiggle { 0% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } 100% { transform: rotate(-5deg); } }
+        @keyframes click { 0% { transform: rotate(-30deg) translateY(0vh); } 80% { transform: rotate(-30deg) translateY(5vh); } 100% { transform: rotate(-30deg) translateY(0vh); } }
+        @keyframes spin { to { transform: rotate(0turn); } from { transform: rotate(1turn); } }
+        @keyframes rotate { from { transform: rotate3d(var(--rx), var(--ry), var(--rz), 0turn); } to { transform: rotate3d(var(--rx), var(--ry), var(--rz), 1turn); } }
+
+        #player-container { display: none; }
+        .stage-hint { margin-top: 20px; color: #aaa; font-size: 0.9rem; text-align: center; }
+    </style>
+</head><body><div class="hearts-container" id="hearts-bg"></div><div class="stage-container"><div id="stage-1" class="stage active"><h1 style="color:var(--text-color); margin-bottom: 40px;">Valentine's Day</h1><div class="door-scene-wrapper" onclick="openDoor()"><div class="door-frame"><div class="door-void"><div class="door-light"></div><div class="door"><div class="door-panel"></div><div class="knob"></div></div></div></div><div class="mat"></div></div><p class="stage-hint" style="margin-top: 30px;">Tap door to come in</p></div><div id="stage-2" class="stage"><h2 style="margin-bottom: 10px;">จุดเริ่มต้น…..</h2><div class="photos-container"><div class="clothesline top"></div><div class="photo-hanger" style="top: 25%; left: 15%; --rot: 3deg;" onclick="zoomPhoto(this)"><div class="clip"></div><div class="polaroid-mini"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943037671_a964pwe.jpg?alt=media&token=2f2047cf-3be0-4124-8f77-495021ef6003"></div></div><div class="photo-hanger" style="top: 25%; left: 50%; margin-left:-42px; --rot: -2deg;" onclick="zoomPhoto(this)"><div class="clip"></div><div class="polaroid-mini"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943202261_era88dv.jpg?alt=media&token=64fbdb2c-994c-45bc-ab1b-f8f9226eb05b"></div></div><div class="photo-hanger" style="top: 25%; right: 15%; --rot: 4deg;" onclick="zoomPhoto(this)"><div class="clip"></div><div class="polaroid-mini"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943270647_gshqmsz.jpg?alt=media&token=5a9a087a-6820-4ec6-bb20-6cfe6c48ebf0"></div></div><div class="clothesline bottom"></div><div class="photo-hanger" style="top: 65%; left: 15%; --rot: -3deg;" onclick="zoomPhoto(this)"><div class="clip"></div><div class="polaroid-mini"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943344921_1o49ryl.jpg?alt=media&token=c4afaf09-6726-4d54-91cf-ed836f8220d7"></div></div><div class="photo-hanger" style="top: 65%; left: 50%; margin-left:-42px; --rot: 1deg;" onclick="zoomPhoto(this)"><div class="clip"></div><div class="polaroid-mini"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943435185_181gxfv.jpg?alt=media&token=6a4ca9ae-182d-400a-a9cf-3dcf951997dd"></div></div><div class="photo-hanger" style="top: 65%; right: 15%; --rot: -4deg;" onclick="zoomPhoto(this)"><div class="clip"></div><div class="polaroid-mini"><img src="https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943401343_nofgm95.jpg?alt=media&token=454a6484-fe21-4df4-9d1f-8a9f573eb9b3"></div></div></div><p class="stage-hint">Tap photos to zoom</p><button class="btn-cozy" style="margin-top: 20px;" onclick="goToStage(3)">Refill Love &rarr;</button></div><div id="stage-3" class="stage"><h2>Refill Love</h2><div class="coffee-table-scene"><div class="heart-meter-wrapper" id="target-heart"><div class="heart-bg-shape"><div class="heart-fill" id="heart-fill"></div></div></div><div class="cup-container cup-1" onclick="sendLove(this)"><div class="cup"></div></div><div class="cup-container cup-2" onclick="sendLove(this)"><div class="cup"></div></div><div class="table"></div><div class="table-legs"><div class="leg"></div><div class="leg"></div></div></div><p class="stage-hint">Tap cups to fill the heart ❤️</p><button class="btn-cozy" id="btn-coffee" style="opacity:0; pointer-events:none;" onclick="goToStage(4)">Get Gift &rarr;</button></div><div id="stage-4" class="stage"><div id="gasha-app" class="gotcha"><div class="container"><div class="game-layer"><div class="machine-container"><div class="backboard"></div><div class="balls"></div><img class="machine" src="https://assets.codepen.io/2509128/gotcha.svg" /><div class="title stroke-text"><span>G</span><span>O</span><span>T</span><span>C</span><span>H</span><span>A</span></div><div class="price">LOVE</div><img class="handle" src="https://assets.codepen.io/2509128/handle.svg" /><div class="pointer"><img src="https://assets.codepen.io/2509128/point.png" /></div></div></div><div class="ui-layer"><div class="title-container"><div class="title"><h2 class="wiggle stroke-text"></h2></div></div><div class="prize-container"><div class="prize-ball-container"></div><div class="prize-reward-container"><div class="shine"><img src="https://assets.codepen.io/2509128/shine.png" /></div><div class="prize"><img class="wiggle" src="https://assets.codepen.io/2509128/prize1.png" /></div></div></div></div></div></div></div><div id="stage-5" class="stage"><div class="note-paper"><div class="tape-corner"></div><h3 style="color:var(--primary); margin-top:0;">ถึง…เบบี๋</h3><div id="typewriter-text" style="font-size:1.1rem; line-height:2.0; padding-top: 10px; color:#555;"></div><div style="text-align:right; margin-top:20px; font-weight:bold; color:var(--text-color);">- 🐰 -</div></div><button class="btn-cozy" onclick="goToStage(4)">Gachapon</button></div></div><div id="player-container"></div> <script>
+        // --- CONFIG ---
+        const CUSTOM_YOUTUBE_URL = "https://youtu.be/9gK8SZijQ_U?si=GiRCSCnu6rq2nshR"; 
+        const FINAL_MSG = `ขอบคุณที่อยู่ข้างกันมาตลอดนะ เค้ายินดีที่เบบี๋เลือกทางเดินของตัวเองได้แล้ว เบบี๋ไม่ต้องห่วงเค้ากับลูกนะ เราสองคนจะมองดูเบบี๋ตบอด ไม่ว่าจะสุขหรือทุกข์ เบบี๋ก็ยังจับมือเค้าไว้ได้เสมอ เค้าสัญญาว่าจะดูแลลูกให้ดีที่สุด จะเป็นคนที่ดีขึ้นในทุกๆ วัน จี้รักตั้มนะ`;
+        const USER_PHOTO_URL = "https://firebasestorage.googleapis.com/v0/b/lovepage-wedding-images.firebasestorage.app/o/wedding_uploads%2F1770943543063_nkw3hcu.jpg?alt=media&token=bce99333-8bb4-4e87-8f4c-32b2a054c818";
+
+        // --- YOUTUBE ---
+        function extractVideoID(url) { var match = url.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/); return (match && match[7].length == 11) ? match[7] : false; }
+        const VIDEO_ID = extractVideoID(CUSTOM_YOUTUBE_URL);
+        var player;
+        function onYouTubeIframeAPIReady() { if(VIDEO_ID) player = new YT.Player('player-container', { height: '0', width: '0', videoId: VIDEO_ID, playerVars: { 'playsinline': 1, 'controls': 0, 'loop': 1 } }); }
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; document.body.appendChild(tag);
+
+        // --- BG HEARTS ---
+        function createHearts() {
+            const container = document.getElementById('hearts-bg');
+            for(let i=0; i<15; i++) {
+                const h = document.createElement('div'); h.className = 'heart-bg'; h.innerText = '♥';
+                h.style.left = Math.random() * 100 + 'vw'; h.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                h.style.animationDuration = (Math.random() * 5 + 5) + 's'; h.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(h);
+            }
+        }
+        createHearts();
+
+        // --- NAV ---
+        function playMusic() { if(player && player.playVideo) { player.playVideo(); player.setVolume(60); } }
+        
+        function goToStage(num) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById(`stage-${num}`).classList.add('active');
+            if(num === 4) initGashapon(); // Trigger Gashapon Init
+            if(num === 5) startTypewriter();
+        }
+
+        // STAGE 1, 2, 3 (Same Logic)
+        function openMailbox() { document.querySelector('.mailbox-scene').classList.add('open'); playMusic(); setTimeout(() => goToStage(2), 1500); }
+        function zoomPhoto(el) { el.classList.toggle('zoomed'); }
+        
+        let fillLevel = 0; const maxLevel = 100;
+        function sendLove(cupEl) {
+            if(fillLevel >= maxLevel) return;
+            const bubble = document.createElement('div'); bubble.className = 'floating-bubble'; bubble.style.backgroundImage = `url(${USER_PHOTO_URL})`;
+            const cupRect = cupEl.getBoundingClientRect(); const heartRect = document.getElementById('target-heart').getBoundingClientRect();
+            document.body.appendChild(bubble);
+            bubble.style.position = 'fixed'; bubble.style.left = (cupRect.left + 10) + 'px'; bubble.style.top = (cupRect.top) + 'px';
+            bubble.style.transition = 'all 1.5s ease-in-out'; 
+            requestAnimationFrame(() => { bubble.style.left = (heartRect.left + 80) + 'px'; bubble.style.top = (heartRect.top + 70) + 'px'; bubble.style.opacity = 0; bubble.style.transform = 'scale(0.5)'; });
+            setTimeout(() => {
+                bubble.remove(); fillLevel += 5; if(fillLevel > maxLevel) fillLevel = maxLevel;
+                document.getElementById('heart-fill').style.height = fillLevel + '%';
+                if(fillLevel >= maxLevel) { document.getElementById('btn-coffee').style.opacity = 1; document.getElementById('btn-coffee').style.pointerEvents = 'auto'; }
+            }, 1000);
+        }
+
+        // ================= STAGE 4: GASHAPON LOGIC (PORTED FROM ORIGINAL) =================
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+        
+        // Helper Functions
+        const addAnimClass = ($e, clazz) => {
+            if (typeof $e === 'string') $e = document.querySelector($e);
+            $e.classList.add(clazz);
+            $e.setAttribute('data-animate', '');
+        }
+
+        const confetti = ($parent, { count = 100, x = 50, y = 50 } = {}) => {
+            const $container = document.createElement('div');
+            $container.classList.add('confetti');
+            for (let i = 0; i < count; i++) {
+                const $particle = document.createElement('span');
+                const settings = {
+                    x: x + Math.random() * 20 - 10, y: y + Math.random() * 20 - 10,
+                    speedX: Math.random() * 1 - 0.5, speedY: -2 + Math.random(),
+                    size: 10 + Math.random() * 5
+                };
+                $particle.style.backgroundColor = `hsl(${Math.random() * 360}deg, 80%, 60%)`;
+                $particle.style.setProperty('--rs', Math.random() * 2 + 0.5);
+                $particle.style.width = settings.size + 'px'; $particle.style.height = settings.size + 'px';
+                $particle.style.left = settings.x + '%'; $particle.style.top = settings.y + '%';
+                
+                // Simple animation via GSAP for particles
+                gsap.to($particle, {
+                    x: settings.speedX * 500,
+                    y: settings.speedY * 500 + 1000, // fall down
+                    rotation: Math.random() * 720,
+                    duration: 3,
+                    ease: "power1.out"
+                });
+                $container.appendChild($particle);
+            }
+            $parent.appendChild($container);
+        }
+
+        let balls = [], prizeBall;
+        let $machine, $handle, $balls, $title, $pointer;
+        let $$jitters = [];
+        const SPEED = 1;
+        // สร้างรายการของรางวัลที่จะสุ่ม (ใส่ลิงก์รูปของคุณที่นี่)
+        const PRIZE_LIST = [
+            "https://assets.codepen.io/2509128/prize1.png", // รูปที่ 1 (ตุ๊กตา)
+            "https://assets.codepen.io/2509128/prize2.png", // รูปที่ 2
+            "https://assets.codepen.io/2509128/prize3.png", // รูปที่ 3
+            "https://assets.codepen.io/2509128/prize4.png", // รูปที่ 4
+            // ใส่เพิ่มได้เรื่อยๆ...
+        ];
+
+        // Start Gashapon Sequence when stage is active
+        function initGashapon() {
+            const prizeImg = document.querySelector('.prize img'); // หาแท็กรูปของรางวัล
+            const randomIndex = Math.floor(Math.random() * PRIZE_LIST.length); // สุ่มเลข
+            prizeImg.src = PRIZE_LIST[randomIndex]; // เปลี่ยนรูป src
+
+            // Selectors scoped to #gasha-app
+            const app = document.querySelector('#gasha-app');
+            $machine = app.querySelector('.machine-container');
+            $handle = app.querySelector('.handle');
+            $balls = app.querySelector('.balls');
+            $title = app.querySelector('.title-container .title');
+            $pointer = app.querySelector('.pointer');
+
+            createBalls();
+
+            // Initial State
+            gsap.set($machine, { y: '100vh' });
+            gsap.set($title, { y: '120vh' });
+            gsap.set($pointer, { opacity: 0 });
+            gsap.set('.prize-reward-container', { opacity: 0 });
+
+            // Animate In
+            setTimeout(prepare, 500);
+        }
+
+        function createBalls() {
+            $balls.innerHTML = '';
+            balls = [];
+            let id = 0;
+            const createBall = (x, y, rotate = ~~(Math.random() * 360), hue = ~~(Math.random() * 360)) => {
+                const size = 8;
+                const $ball = document.createElement('figure');
+                $ball.classList.add('g-ball');
+                $ball.style.setProperty('--size', `${size}vh`);
+                $ball.style.setProperty('--color1', `hsl(${hue}deg, 80%, 70%)`);
+                $ball.style.setProperty('--color2', `hsl(${hue + 20}deg, 50%, 90%)`);
+                $ball.style.setProperty('--outline', `hsl(${hue}deg, 50%, 55%)`);
+                
+                $balls.appendChild($ball);
+
+                const ball = { dom: $ball, x, y, rotate };
+                
+                // Position
+                gsap.set($ball, {
+                    left: `calc(${x} * (100% - ${size}vh))`,
+                    top: `calc(${y} * (100% - ${size}vh))`,
+                    rotation: rotate
+                });
+
+                balls.push(ball);
+                return ball;
+            }
+            
+            createBall(0.5, 0.6); createBall(0, 0.68); createBall(0.22, 0.65);
+            createBall(0.7, 0.63); createBall(0.96, 0.66);
+            createBall(0.75, 0.79); createBall(0.5, 0.8);
+            prizeBall = createBall(0.9, 0.81); // Winner
+            createBall(0, 0.82); createBall(1, 0.9);
+            createBall(0.25, 0.85); createBall(0.9, 1);
+            createBall(0.4, 1); createBall(0.65, 1); createBall(0.09, 1);
+        }
+
+        const prepare = () => {
+            gsap.to($machine, {
+                y: '0vh', ease: 'none', duration: 0.6,
+                onComplete() {
+                    $handle.style.cursor = 'pointer';
+                    $handle.addEventListener('click', startGasha, { once: true });
+                    
+                    // Ball settle animation
+                    balls.forEach(ball => {
+                        gsap.to(ball.dom, { y: 0, duration: 0.2, ease: 'power1.in' });
+                    });
+                    
+                    setTimeout(showHint, 1000);
+                }
+            });
+        }
+
+        const startGasha = async () => {
+            $handle.style.cursor = 'default';
+            hideHint();
+
+            // 1. Handle Spin & Jitter
+            const tl = gsap.timeline();
+            tl.to($handle, { rotate: 90, duration: 0.3, ease: 'power1.in', onComplete: () => { jitter(); } })
+              .to({}, { duration: 1 }) // Wait
+              .call(stopJittering)
+              .to($handle, { rotate: 0, duration: 1 });
+            
+            await delay(1500);
+
+            // 2. Ball Drop Logic
+            // Move other balls out of way
+            gsap.to(balls[3].dom, { x: '1vh', y: '1vh', duration: 0.5 });
+            gsap.to(balls[4].dom, { x: '-1vh', y: '1vh', duration: 0.5 });
+
+            // Drop Prize Ball path
+            const dropTl = gsap.timeline();
+            dropTl.to(prizeBall.dom, { x: '-3vh', duration: 0.5 })
+                  .to(prizeBall.dom, { y: '12vh', duration: 0.5, ease: 'power1.in' }) // Down hole
+                  .to(prizeBall.dom, { y: '23vh', duration: 0.5, ease: 'power1.in' }) // To exit
+                  .to(prizeBall.dom, { y: '22vh', duration: 0.2, ease: 'power1.out' }) // Bounce
+                  .to(prizeBall.dom, { y: '23vh', duration: 0.2, ease: 'power1.in' });
+
+            await delay(2000);
+            
+            // 3. User Pickup
+            prizeBall.dom.style.cursor = 'pointer';
+            prizeBall.dom.style.zIndex = 100; // Bring to front
+            
+            // Add click listener to ball
+            showHint2(); // Show "Tap to open"
+            
+            prizeBall.dom.addEventListener('click', pickup, { once: true });
+        }
+
+        const pickup = () => {
+            hideHint();
+            
+            // Move ball to center and scale up
+            const appRect = document.querySelector('#gasha-app').getBoundingClientRect();
+            
+            // GSAP Flip-like animation
+            let tl = gsap.timeline();
+            
+            // Move ball to prize container visually
+            // Note: Simplification for layout integration
+            gsap.set(prizeBall.dom, { position: 'fixed', left: '50%', top: '60%', x: '-50%', y: '-50%', margin: 0 });
+            
+            tl.to(prizeBall.dom, {
+                scale: 3,
+                rotation: -180,
+                duration: 1,
+                ease: 'power1.inOut'
+            })
+            .to(prizeBall.dom, {
+                scale: 4,
+                duration: 0.5,
+                ease: 'power1.out',
+                onComplete: pop
+            });
+        }
+
+        const pop = () => {
+            // Confetti
+            //confetti(document.querySelector('.ui-layer'));
+            
+            // Hide Ball
+            gsap.to(prizeBall.dom, { opacity: 0, duration: 0.1 });
+            
+            // Show Reward
+            gsap.set('.prize-reward-container', { opacity: 1 });
+            gsap.from('.prize img', { scale: 0, duration: 0.5, ease: 'back.out' });
+            
+            // Move machine away
+            gsap.to($machine, { y: '100vh', duration: 1, delay: 0.5 });
+            
+            // Transition to Stage 5
+            setTimeout(() => {
+                goToStage(5);
+            }, 3000);
+        }
+
+        const showHint = () => {
+            gsap.set($pointer, { opacity: 0 });
+            gsap.to($title, { y: '80vh', duration: 1, ease: 'back.out' });
+            gsap.to($pointer, { opacity: 1, duration: 1 });
+        }
+        const hideHint = () => {
+            gsap.to($title, { y: '120vh', duration: 0.6 });
+            gsap.to($pointer, { opacity: 0, duration: 1 });
+        }
+        const showHint2 = () => {
+            
+            gsap.set($pointer, { x: '16vh', y: '3vh' }); // Adjust pointer position
+            gsap.to($title, { y: '80vh', duration: 1, ease: 'back.out' });
+            gsap.to($pointer, { opacity: 1, duration: 1 });
+        }
+
+        const jitter = () => {
+            balls.forEach(({ dom, rotate }, i) => {
+                const tl = gsap.timeline({ repeat: -1, delay: -i * 0.0613 });
+                gsap.set(dom, { y: 0, rotation: rotate });
+                tl.to(dom, { y: -(Math.random() * 6 + 2), rotation: rotate, duration: 0.1 })
+                  .to(dom, { y: 0, rotation: rotate - Math.random() * 10 - 5, duration: 0.1 });
+                $$jitters.push(tl);
+            });
+            const tl = gsap.timeline({ repeat: -1 });
+            tl.to('.machine-container', { x: 2, duration: 0.1 })
+              .to('.machine-container', { x: 0, duration: 0.1 });
+            $$jitters.push(tl);
+        }
+
+        const stopJittering = () => {
+            $$jitters.forEach($$jitter => $$jitter.pause());
+            balls.forEach(({ dom, rotate }) => gsap.to(dom, { y: 0, rotation: rotate, duration: 0.1 }));
+            gsap.to('.machine-container', { x: 0, duration: 0.1 });
+        }
+
+        // --- STAGE 5: TYPEWRITER ---
+function startTypewriter() {
+    const target = document.getElementById('typewriter-text');
+    target.innerHTML = '<span class="cursor">|</span>';
+
+    const msg = FINAL_MSG;
+    const speed = 55;
+
+    // แยก tag (<br>) ออกจาก text
+    const parts = msg.match(/(<[^>]+>|[^<]+)/g) || [];
+
+    // ใช้ grapheme cluster สำหรับภาษาไทย
+    const segmenter = new Intl.Segmenter('th', { granularity: 'grapheme' });
+
+    let partIndex = 0;
+    let charIndex = 0;
+    let segments = [];
+
+    function type() {
+        if (partIndex >= parts.length) return;
+
+        const cursor = target.querySelector('.cursor');
+        const part = parts[partIndex];
+
+        // ถ้าเป็น tag เช่น <br>
+        if (part.startsWith('<')) {
+            cursor.insertAdjacentHTML('beforebegin', part);
+            partIndex++;
+            charIndex = 0;
+            setTimeout(type, speed);
+            return;
+        }
+
+        // ถ้าเป็นข้อความ
+        if (charIndex === 0) {
+            segments = [...segmenter.segment(part)];
+        }
+
+        if (charIndex < segments.length) {
+            cursor.insertAdjacentText(
+                'beforebegin',
+                segments[charIndex].segment
+            );
+            charIndex++;
+            setTimeout(type, speed);
+        } else {
+            partIndex++;
+            charIndex = 0;
+            setTimeout(type, speed);
+        }
+    }
+
+    setTimeout(type, 500);
+}
+
+        // แทนที่ฟังก์ชัน openMailbox เดิมด้วยอันนี้
+        function openDoor() {
+            const doorScene = document.querySelector('.door-scene-wrapper');
+            
+            // 1. สั่งเปิดประตู
+            doorScene.classList.add('open');
+            playMusic(); // เล่นเพลงเริ่มตรงนี้
+            
+            // 2. หลังจากประตูเปิดสุด (1.2วิ) ให้ซูมเข้า (Enter)
+            setTimeout(() => {
+                doorScene.classList.add('enter');
+            }, 800);
+
+            // 3. เปลี่ยนฉากไป Stage 2
+            setTimeout(() => {
+                goToStage(2);
+            }, 2000); 
+        }
+    </script> </body></html>
